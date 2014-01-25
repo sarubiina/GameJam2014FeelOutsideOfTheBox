@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Feel Outside The Box</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/site.css" />
+        <script type="text/javascript" src="js/enchant/enchant.js"></script>
+        <script type="text/javascript" src="js/jquery/jquery-1.11.0.js"></script>
+    </head>
+    <body>
+        <div id="header"><h1>Feel Outside The Box</h1></div>
+        <hr />
+        <div id="content">
+            <div id="enchant-stage"></div>
+        </div>
+        <hr />
+        <div id="footer">
+            <ul>
+                <li>
+                    <span class="credits_title">Credits:</span>
+                    <ul>
+                        <li>Coded by <span class="credit">Katariina INSERTNAMEHERE</span> and <span class="credit">Mikko Sairo</span></li>
+                        <li>Graphics by <span class="credit">Muura Parkkinen</span> and <span class="credit">Mira INSERTNAMEHERE</span></li>
+                        <li>Audio by <span class="credit">Tapani INSERTNAMEHERE</span> and <span class="credit">INSERTNAMEHERE INSERTNAMEHERE</span></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <script type="text/javascript">
+            var gamediv = $('#enchant-stage');
+            window.onload = function() {
+                enchant();
+                
+                var game = new Game(1024,600);
+                game.preload('img/test_world.png', 'img/tipu.gif');
+                game.onload = function() {
+                    game.scale = 1;
+                    game.fps = 20;
+                    
+                    var startScene = new StartScene();
+                    game.pushScene(startScene);
+                };
+                
+                game.start();
+                
+                var StartScene = Class.create(Scene, {
+                    game: Game.instance,
+                    initialize: function() {
+                        Scene.apply(this);
+                        
+                        this.backgroundColor = '#aaaaaa';
+
+                        this.title = new Label("Feel Outside The Box");
+                        this.title.font = '32px Comic Sans MS';
+                        this.title.width = 330;
+                        this.title.x = gamediv.width() / 2 - this.title.width / 2;
+                        this.title.y = 50;
+                        this.addChild(this.title);
+                        
+                        this.subtitle = new TitleLabel("FGJ2014 - Pohjois-Karjala");
+                        this.subtitle.width = 380;
+                        this.subtitle.x = gamediv.width() / 2 - this.subtitle.width / 2;
+                        this.subtitle.y = 150;
+                        this.addChild(this.subtitle);
+                        
+                        this.char = new Sprite(1000,732);
+                        this.char.image = game.assets['img/tipu.gif'];
+                        this.char.frame = [0,1,2,3,4,5,6,7,8,9,10,11];
+                        this.char.scaleX = 0.2;
+                        this.char.scaleY = 0.2;
+                        this.char.x = gamediv.width() / 2 - this.char.width / 2;
+                        this.char.y = -130;
+                        this.addChild(this.char);
+                        
+                        this.world = new Sprite(1000, 1000);
+                        this.world.image = game.assets['img/test_world.png'];
+                        this.world.scaleX = 5;
+                        this.world.scaleY = 5;
+                        this.world.x = gamediv.width() / 2 - this.world.width / 2;
+                        this.world.y = 2450;
+                        this.addChild(this.world);
+                        
+                        
+                        this.addEventListener(Event.TOUCH_START, this.onTouchStart);
+                        this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
+                    },
+
+                    onTouchStart: function(e) {
+                        
+                    },
+                    onEnterFrame: function(e) {
+                        this.char.frame += 1;
+                        this.char.animationDuration -= 0.25;
+                        this.world.rotate(-0.1);
+                    }
+                });
+                
+                var Character = Class.create(Sprite, {
+                    game: Game.instance,
+                    initialize: function(image) {
+                        Sprite.apply(this);
+                        if(typeof image === 'string') {
+                            this.image = image;
+                        }
+                    }
+                });
+                
+                var TitleLabel = Class.create(Label, {
+                    game: Game.instance,
+                    initialize: function(text) {
+                        Label.apply(this);
+                        this.text = text;
+                        this.font = '32px Comic Sans MS';
+                        this.width = 330;
+                    }
+                });
+            };
+        </script>
+    </body>
+</html>
