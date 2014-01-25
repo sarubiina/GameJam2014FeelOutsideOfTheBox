@@ -42,9 +42,14 @@ and open the template in the editor.
                 game.onload = function() {
                     game.scale = 1;
                     game.fps = 20;
+                    game.scenes = new Object();
                     
                     var startScene = new StartScene();
-                    game.pushScene(startScene);
+                    game.scenes.start = startScene;
+                    var gameScene = new GameScene();
+                    game.scenes.game = gameScene;
+                    
+                    game.pushScene(game.scenes.start);
                 };
                 
                 game.start();
@@ -69,26 +74,18 @@ and open the template in the editor.
                         this.subtitle.y = 150;
                         this.addChild(this.subtitle);
                         
-                        this.char = new Character(781,602, game.assets['img/tipu_1000x732.gif']);
-                        this.char.frame = [0,1,2,3,4,5,6,9,10,11];
+                        this.char = new Character(781,602);
                         this.addChild(this.char);
                         
-                        this.world = new Sprite(1000, 1000);
-                        this.world.image = game.assets['img/test_world.png'];
-                        this.world.scaleX = 5;
-                        this.world.scaleY = 5;
-                        this.world.x = gamediv.width() / 2 - this.world.width / 2;
-                        this.world.y = 2450;
+                        this.world = new World(1000, 1000, 'img/test_world.png');
                         this.addChild(this.world);
-                        
-                        
                         
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
                         this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
                     },
 
                     onTouchStart: function(e) {
-                        
+                        game.replaceScene(game.scenes.game);
                     },
                     onEnterFrame: function(e) {
                         //this.char.onEnterFrame(e);
@@ -101,12 +98,7 @@ and open the template in the editor.
                     initialize: function() {
                         Scene.apply(this);
                         
-                        this.world = new Sprite(5000, 5000);
-                        this.world.image = game.assets['img/world_5000x5000.gif'];
-                        this.world.scaleX = 1;
-                        this.world.scaleY = 1;
-                        this.world.x = gamediv.width() / 2 - this.world.width / 2;
-                        this.world.y = 2450;
+                        this.world = new World(1000, 1000, 'img/test_world.png');
                         this.addChild(this.world);
                         
                         this.backgroundColor = '#dddddd';
@@ -117,7 +109,40 @@ and open the template in the editor.
                         this.title.x = gamediv.width() / 2 - this.title.width / 2;
                         this.title.y = 50;
                         this.addChild(this.title);
+                        
+                        this.char = new Character(781,602);
+                        this.addChild(this.char);
+                        
+                        this.clock = new Clock();
+                        this.addChild(this.clock);
+                        
+                        this.addEventListener(Event.TOUCH_START, this.onTouchStart);
+                        this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
+                    },
+                    onTouchStart: function(e) {
+                        game.replaceScene(game.scenes.start);
+                    },
+                    onEnterFrame: function(e) {
+                        this.world.rotate(-0.1);
+                        this.clock.onEnterFrame(e);
                     }
+                });
+                
+                var World = Class.create(Sprite, {
+                   game: Game.instance,
+                   initialize: function(width, height, image) {
+                        Sprite.apply(this, [width, height]);
+                        if(typeof image === 'string') {
+                            this.image = game.assets[image];
+                        } else if(typeof image === 'object') {
+                            this.image = image;
+                        }
+                        
+                        this.scaleX = 5;
+                        this.scaleY = 5;
+                        this.x = gamediv.width() / 2 - this.width / 2;
+                        this.y = 2450;
+                   }
                 });
                 
                 var Character = Class.create(Sprite, {
@@ -128,6 +153,9 @@ and open the template in the editor.
                             this.image = game.assets[image];
                         } else if(typeof image === 'object') {
                             this.image = image;
+                        } else {
+                            this.image = game.assets['img/tipu_1000x732.gif'];
+                            this.frame = [0,1,2,3,4,5,6,9,10,11];
                         }
                         
                         this.scaleX = 0.15;
@@ -141,7 +169,6 @@ and open the template in the editor.
                     }
                 });
                 
-                
                 var TitleLabel = Class.create(Label, {
                     game: Game.instance,
                     initialize: function(text) {
@@ -149,6 +176,38 @@ and open the template in the editor.
                         //this.text = text;
                         this.font = '32px Comic Sans MS';
                         this.width = 330;
+                    }
+                });
+                
+                var Clock = Class.create(Label, {
+                    game: Game.instance,
+                    initialize: function() {
+                        Label.apply(this, ['00:00']);
+                        
+                        this.hours = 8;
+                        this.minutes = 0;
+                        this.time = 0;
+                        
+                        this.font = "32px Comic Sans MS";
+                        
+                        this.updateClock();
+                    },
+                    updateClock: function() {
+                        var hourText = this.hours > 9 ? this.hours : "0" + this.hours;
+                        var minText = this.minutes > 9 ? this.minutes : "0" + this.minutes;
+                        
+                        this.text = hourText + ":" + minText;
+                    },
+                    onEnterFrame: function(e) {
+                        this.time += e.elapsed * 0.001;
+                        if(this.time >= 5) {
+                            this.minutes = (this.minutes + 15) % 60;
+                            if(this.minutes === 0) {
+                                this.hours = (this.hours + 1) % 60;
+                            }
+                            this.time -= 5;
+                            this.updateClock();
+                        }
                     }
                 });
             };
