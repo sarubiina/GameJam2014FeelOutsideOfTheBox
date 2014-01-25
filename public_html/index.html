@@ -118,11 +118,27 @@ and open the template in the editor.
                         
                         // Define different GameObjects, or NPCs
                         this.npcs = new Array();
+                        
                         var cat = new GameObject(765,1984, 'img/kissa.png');
                         cat.distance = 1760;
                         cat.rotate(20);
                         this.addChild(cat);
                         this.npcs.push(cat);
+                        
+                        var catEvent = new GameEvent();
+                        catEvent.initialText = "Hello world!";
+                        var option1 = new Option("What a nice day!");
+                        var o1_answer1 = new Answer("Go away.", Types.sad, 2);
+                        var o1_answer2 = new Answer("Indeed it is!", Types.happy, 2);
+                        option1.answers.push(o1_answer1);
+                        option1.answers.push(o1_answer2);
+                        var option2 = new Option("Go away.");
+                        var o2_answer1 = new Answer("Same to you.", Types.angry, 2);
+                        var o2_answer2 = new Answer("Fine.", Types.angry, 2);
+                        option2.answers.push(o2_answer1);
+                        option2.answers.push(o2_answer2);
+                        catEvent.options.push(option1);
+                        catEvent.options.push(option2);
                         
                         var coala = new GameObject(917,1084, 'img/koalaW917.png');
                         coala.distance = 1800;
@@ -142,8 +158,6 @@ and open the template in the editor.
                         this.addChild(trashbin);
                         this.npcs.push(trashbin);
                         
-                        this.rotateObjects(0);
-                        
                         // Define the Player Character
                         this.char = new Character(781,602);
                         this.char.frame = [null];
@@ -154,8 +168,13 @@ and open the template in the editor.
                         this.clock.timeSpeed = 3;
                         this.addChild(this.clock);
                         
-                        //this.dialog = new Dialog("This is test dialog.");
-                        //this.addChild(this.dialog);
+                        // Define Game UI Objects
+                        
+                        this.ui = new Array();
+                        
+                        this.charChat = new ChatBubble(this, this.char, "Hello world! This is going to be a long-ish     text. Let's make it even longer just to make  it longer.");
+                        this.charChat.show();
+                        this.charChat.updatePosition(this.world);
                         
                         // Event bindings
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
@@ -171,12 +190,14 @@ and open the template in the editor.
                         this.timeElapsedObjects = 0;
                         this.timeElapsedChar = 0;
                         
-                        // Variables for game speec and such
+                        // Variables for game speed and such
                         this.charUpdateSpeed = 0.01;
                         this.objectUpdateSpeed = 0.25;
                         this.worldRotationSpeed = 0.15;
+                        
+                        // Initialize objects
+                        this.rotateObjects(0);
                     },
-                    
                     updateSkyColor: function() {
                         var hours = this.clock.hours;
                         if(hours > 22 || hours < 6) {
@@ -230,6 +251,10 @@ and open the template in the editor.
                             this.npcs[i].rotate(degrees);
                             this.npcs[i].updatePosition(this.world);
                         }
+                        for(i=0;i<this.ui.length; i++) {
+                            this.ui[i].rotate(degrees);
+                            this.ui[i].updatePosition(this.world);
+                        }
                     },
                     
                     animateObjects: function(elapsed) {
@@ -251,7 +276,8 @@ and open the template in the editor.
                     },
                     
                     onTouchStart: function(e) {
-                        game.replaceScene(game.scenes.start);
+                        //game.replaceScene(game.scenes.start);
+                        this.charChat.hide();
                     },
                     onEnterFrame: function(e) {
                         this.clock.onEnterFrame(e);
@@ -361,6 +387,128 @@ and open the template in the editor.
                         this.y = this.origY - this.distance * Math.cos(this.rotation * Math.PI / 180);
                     }
                 });
+                var GameUIObject = Class.create(Sprite, {
+                    game: Game.instance,
+                    initialize: function(width, height, image) {
+                        Sprite.apply(this, [width, height]);
+                        if(typeof image === 'string') {
+                            this.image = game.assets[image];
+                        } else if(typeof image === 'object') {
+                            this.image = image;
+                        }
+                        this.x = gamediv.width() / 2 - this.width / 2;
+                        this.scaleX = 0.5;
+                        this.scaleY = 0.5;
+                        this.distance = 2075;
+                    },
+                    updatePosition: function(world) {
+                        this.origX = world.x + world.width / 2 - this.width/2;
+                        this.origY = world.y + world.height / 2 - this.height/2;
+                        this.x = this.origX + this.distance * Math.sin(this.rotation * Math.PI / 180);
+                        this.y = this.origY - this.distance * Math.cos(this.rotation * Math.PI / 180);
+                    }
+                });
+                
+                var ChatBubble = function(scene, gameObject, text) {
+                    this.scene = scene;
+                    this.bubble = new GameUIObject(958, 465, 'img/kuplaW958.png');
+                    this.bubble.scaleY = 0.3;
+                    this.bubble.scaleX = 0.6;
+                    this.bubble.distance = 2130;
+                    this.bubble.rotate(gameObject.rotation);
+                    this.chatLine = new GameUIObject(176, 280, 'img/viivaW176.png');
+                    this.chatLine.rotate(gameObject.rotation - 1);
+                    this.chatLine.distance = 1990;
+                    this.chatLine.scaleY = 0.85;
+                    this.text = new ChatLabel(text);
+                    this.text.rotate(gameObject.rotation);
+                    
+                    this.setText = function(text) {
+                        this.text.text = text;
+                    };
+                    
+                    this.rotate = function(degrees) {
+                        this.bubble.rotate(degrees);
+                        this.chatLine.rotate(degrees);
+                        this.text.rotate(degrees);
+                    };
+                    
+                    this.updatePosition = function(world) {
+                        this.bubble.origX = world.x + world.width / 2 - this.bubble.width/2;
+                        this.bubble.origY = world.y + world.height / 2 - this.bubble.height/2;
+                        this.chatLine.origX = world.x + world.width / 2 - this.chatLine.width/2;
+                        this.chatLine.origY = world.y + world.height / 2 - this.chatLine.height/2;
+                        this.text.origX = world.x + world.width / 2 - this.text.width/2;
+                        this.text.origY = world.y + world.height / 2 - this.text.height/2;
+                        this.bubble.x = this.bubble.origX + this.bubble.distance * Math.sin(this.bubble.rotation * Math.PI / 180);
+                        this.bubble.y = this.bubble.origY - this.bubble.distance * Math.cos(this.bubble.rotation * Math.PI / 180);
+                        this.chatLine.x = this.chatLine.origX + this.chatLine.distance * Math.sin(this.chatLine.rotation * Math.PI / 180);
+                        this.chatLine.y = this.chatLine.origY - this.chatLine.distance * Math.cos(this.chatLine.rotation * Math.PI / 180);
+                        this.text.x = this.text.origX + this.text.distance * Math.sin(this.text.rotation * Math.PI / 180);
+                        this.text.y = this.text.origY - this.text.distance * Math.cos(this.text.rotation * Math.PI / 180);
+                    };
+                    
+                    this.show = function() {
+                        this.scene.addChild(this.bubble);
+                        this.scene.addChild(this.chatLine);
+                        this.scene.addChild(this.text);
+                    };
+                    
+                    this.hide = function() {
+                        this.scene.removeChild(this.bubble);
+                        this.scene.removeChild(this.chatLine);
+                        this.scene.removeChild(this.text);
+                    };
+                };
+                
+                var GameEvent = function() {
+                    this.initialText = "";
+                    this.options = new Array();
+                    
+                    this.showEvent = function() {
+                        var game = Game.instance;
+                        
+                    };
+                };
+                var Option = function(text) {
+                    this.text = typeof text === 'string' ? text : "";
+                    this.answers = new Array();
+                    
+                    this.pickAnswer = function() {
+                        return this.answers[Math.floor(Math.random()*this.answers.length)];
+                    };
+                };
+                var Answer = function(text, type, effect) {
+                    this.text = typeof text === 'string' ? text : "";
+                    this.type = typeof type === 'string' ? type : "neutral";
+                    this.effect = typeof effect === 'number' ? effect : 0;
+                };
+                var Types = {
+                    neutral: "neutral",
+                    happy: "happy",
+                    angry: "angry",
+                    sad: "sad"
+                };
+                
+                var ChatLabel = Class.create(Label, {
+                    game: Game.instance,
+                    initialize: function(text) {
+                        Label.apply(this, [text]);
+                        //this.text = text;
+                        this.font = '24px Comic Sans MS';
+                        this.color = 'black';
+                        this.textAlign = 'left';
+                        this.width = 500;
+                        this.distance = 2160;
+                        this.x = gamediv.width() / 2 - this.width / 2;
+                    },
+                    updatePosition: function(world) {
+                        this.origX = world.x + world.width / 2 - this.width/2;
+                        this.origY = world.y + world.height / 2 - this.height/2;
+                        this.x = this.origX + this.distance * Math.sin(this.rotation * Math.PI / 180);
+                        this.y = this.origY - this.distance * Math.cos(this.rotation * Math.PI / 180);
+                    }
+                });
                 
                 var TitleLabel = Class.create(Label, {
                     game: Game.instance,
@@ -406,20 +554,6 @@ and open the template in the editor.
                             this.time -= this.timeSpeed;
                             this.updateClock();
                         }
-                    }
-                });
-                
-                var Dialog = Class.create(Label, {
-                    game: Game.instance,
-                    initialize: function(text) {
-                        Label.apply(this, [text]);
-                        
-                        this.backgroundColor = 'white';
-                        this.textAlign = 'center';
-                        this.width = text.length * 17;
-                        this.x = gamediv.width() / 2 - this.width / 2;
-                        this.y = 150;
-                        this.font = "32px Comic Sans MS";
                     }
                 });
             };
