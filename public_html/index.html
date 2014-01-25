@@ -46,8 +46,6 @@ and open the template in the editor.
                     
                     var startScene = new StartScene();
                     game.scenes.start = startScene;
-                    var gameScene = new GameScene();
-                    game.scenes.game = gameScene;
                     
                     game.pushScene(game.scenes.start);
                 };
@@ -85,6 +83,9 @@ and open the template in the editor.
                     },
 
                     onTouchStart: function(e) {
+                        var gameScene = new GameScene();
+                        game.scenes.game = gameScene;
+                    
                         game.replaceScene(game.scenes.game);
                     },
                     onEnterFrame: function(e) {
