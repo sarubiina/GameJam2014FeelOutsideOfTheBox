@@ -43,13 +43,15 @@ and open the template in the editor.
                              'img/laatikkohahmoW526.png',
                              'img/koalaW917.png',
                              'img/roskisW930.png',
+                             'img/mummo-619-x-850b.gif',
                              'img/kentta_5000.gif', // UI and other objects
+                             'img/title.gif',
                              'img/viivaW176.png',
                              'img/ajatusW142.png',
                              'img/kuplaW958.png');
                 game.onload = function() {
                     game.scale = 1;
-                    game.fps = 20;
+                    game.fps = 25;
                     game.scenes = new Object();
                     
                     var startScene = new StartScene();
@@ -66,7 +68,7 @@ and open the template in the editor.
                         Scene.apply(this);
                         
                         this.backgroundColor = '#aaaaaa';
-
+                        /*
                         this.world = new World(5000, 5000, 'img/kentta_5000.gif');
                         this.addChild(this.world);
                         
@@ -87,7 +89,11 @@ and open the template in the editor.
                         
                         this.char = new Character(781,602);
                         this.addChild(this.char);
-                        
+                        */
+                        this.title = new Sprite(1024,600);
+                        this.title.image = game.assets['img/title.gif'];
+                        this.title.frame = [0,1,2];
+                        this.addChild(this.title);
                         
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
                         this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
@@ -101,7 +107,7 @@ and open the template in the editor.
                     },
                     onEnterFrame: function(e) {
                         //this.char.onEnterFrame(e);
-                        this.world.rotate(-0.1);
+                        //this.world.rotate(-0.1);
                     }
                 });
                 
@@ -121,9 +127,7 @@ and open the template in the editor.
                         
                         var cat = new GameObject(765,1984, 'img/kissa.png');
                         cat.distance = 1760;
-                        cat.rotate(20);
-                        this.addChild(cat);
-                        this.npcs.push(cat);
+                        cat.rotate(15);
                         
                         var catEvent = new GameEvent();
                         catEvent.initialText = "Hello world!";
@@ -137,26 +141,57 @@ and open the template in the editor.
                         var o2_answer2 = new Answer("Fine.", Types.angry, 2);
                         option2.answers.push(o2_answer1);
                         option2.answers.push(o2_answer2);
+                        var option3 = new Option("What a nice day!");
+                        var o3_answer1 = new Answer("Go away.", Types.sad, 2);
+                        var o3_answer2 = new Answer("Indeed it is!", Types.happy, 2);
+                        option3.answers.push(o3_answer1);
+                        option3.answers.push(o3_answer2);
                         catEvent.options.push(option1);
                         catEvent.options.push(option2);
+                        catEvent.options.push(option3);
+                        
+                        cat.event = catEvent;
+                        this.addChild(cat);
+                        this.npcs.push(cat);
                         
                         var coala = new GameObject(917,1084, 'img/koalaW917.png');
                         coala.distance = 1800;
-                        coala.rotate(cat.rotation + 40);
+                        coala.rotate(cat.rotation + 45);
                         this.addChild(coala);
                         this.npcs.push(coala);
                         
                         var boxguy = new GameObject(526, 1373, 'img/laatikkohahmoW526.png');
                         boxguy.distance = 1800;
-                        boxguy.rotate(coala.rotation + 40);
+                        boxguy.rotate(coala.rotation + 50);
                         this.addChild(boxguy);
                         this.npcs.push(boxguy);
                         
                         var trashbin = new GameObject(930, 1272, 'img/roskisW930.png');
                         trashbin.distance = 1808;
-                        trashbin.rotate(boxguy.rotation + 40);
+                        trashbin.rotate(boxguy.rotation + 50);
                         this.addChild(trashbin);
                         this.npcs.push(trashbin);
+                        
+                        var granny = new GameObject(619, 850, 'img/mummo-619-x-850b.gif');
+                        granny.distance = 1830;
+                        granny.scaleX = 0.2;
+                        granny.scaleY = 0.2;
+                        granny.rotate(trashbin.rotation + 50);
+                        this.addChild(granny);
+                        this.npcs.push(granny);
+                        
+                        var cat = new GameObject(765,1984, 'img/kissa.png');
+                        cat.distance = 1760;
+                        cat.rotate(15);
+                        this.addChild(cat);
+                        this.npcs.push(cat);
+                        
+                        trashbin = new GameObject(930, 1272, 'img/roskisW930.png');
+                        trashbin.distance = 1808;
+                        trashbin.rotate(granny.rotation + 50);
+                        this.addChild(trashbin);
+                        this.npcs.push(trashbin);
+                        
                         
                         // Define the Player Character
                         this.char = new Character(781,602);
@@ -192,8 +227,9 @@ and open the template in the editor.
                         
                         // Variables for game speed and such
                         this.charUpdateSpeed = 0.01;
-                        this.objectUpdateSpeed = 0.25;
+                        this.objectUpdateSpeed = 0.1;
                         this.worldRotationSpeed = 0.15;
+                        this.collisionDistance = 100;
                         
                         // Initialize objects
                         this.rotateObjects(0);
@@ -274,10 +310,17 @@ and open the template in the editor.
                             this.timeElapsedChar -= this.charUpdateSpeed;
                         }
                     },
-                    
+                    checkCollision: function() {
+                        for(var i=0;i<this.npcs.length;i++) {
+                            if(this.char.within(this.npcs[i], this.collisionDistance)) {
+                                return this.npcs[i];
+                            }
+                        }
+                        return null;
+                    },
                     onTouchStart: function(e) {
                         //game.replaceScene(game.scenes.start);
-                        this.charChat.hide();
+                        //this.charChat.hide();
                     },
                     onEnterFrame: function(e) {
                         this.clock.onEnterFrame(e);
@@ -289,6 +332,10 @@ and open the template in the editor.
                         } else if(this.leftButtonDown) {
                             this.rotateObjects(this.worldRotationSpeed);
                             this.animateChar(e.elapsed);
+                        }
+                        var npc = this.checkCollision();
+                        if(npc !== null) {
+                            npc.startEvent();
                         }
                     },
                     onRightButtonDown: function(e) {
@@ -354,6 +401,7 @@ and open the template in the editor.
                         this.direction = 1;
                         this.x = gamediv.width() / 2 - this.width / 2;
                         this.y = 100;
+                        this.mood = { happy: 0, angry: 0, sad: 0 };
                     },
                     turn: function(dir) {
                         if(this.direction !== dir) {
@@ -379,12 +427,18 @@ and open the template in the editor.
                         this.scaleX = 0.1;
                         this.scaleY = 0.1;
                         this.distance = 1750;
+                        this.event = null;
                     },
                     updatePosition: function(world) {
                         this.origX = world.x + world.width / 2 - this.width/2;
                         this.origY = world.y + world.height / 2 - this.height/2;
                         this.x = this.origX + this.distance * Math.sin(this.rotation * Math.PI / 180);
                         this.y = this.origY - this.distance * Math.cos(this.rotation * Math.PI / 180);
+                    },
+                    startEvent: function() {
+                        if(this.event !== null && !this.event.started) {
+                            this.event.showEvent(this);
+                        }
                     }
                 });
                 var GameUIObject = Class.create(Sprite, {
@@ -406,22 +460,38 @@ and open the template in the editor.
                         this.origY = world.y + world.height / 2 - this.height/2;
                         this.x = this.origX + this.distance * Math.sin(this.rotation * Math.PI / 180);
                         this.y = this.origY - this.distance * Math.cos(this.rotation * Math.PI / 180);
+                    },
+                    onTouchStart: function(e) {
+                        if(this.parent.option !== null && this.parent.event !== null) {
+                            this.parent.event.showAnswer(this.parent.option);
+                        } else if(this.parent.event !== null) {
+                            this.parent.event.showOptions();
+                        } else {
+                            this.parent.hide();
+                        }
                     }
                 });
                 
                 var ChatBubble = function(scene, gameObject, text) {
                     this.scene = scene;
+                    
+                    this.option = null;
+                    this.event = null;
+                    
                     this.bubble = new GameUIObject(958, 465, 'img/kuplaW958.png');
                     this.bubble.scaleY = 0.3;
                     this.bubble.scaleX = 0.6;
                     this.bubble.distance = 2130;
                     this.bubble.rotate(gameObject.rotation);
+                    this.bubble.parent = this;
                     this.chatLine = new GameUIObject(176, 280, 'img/viivaW176.png');
                     this.chatLine.rotate(gameObject.rotation - 1);
                     this.chatLine.distance = 1990;
                     this.chatLine.scaleY = 0.85;
                     this.text = new ChatLabel(text);
                     this.text.rotate(gameObject.rotation);
+                    
+                    this.bubble.addEventListener(Event.TOUCH_START, this.bubble.onTouchStart);
                     
                     this.setText = function(text) {
                         this.text.text = text;
@@ -459,15 +529,73 @@ and open the template in the editor.
                         this.scene.removeChild(this.chatLine);
                         this.scene.removeChild(this.text);
                     };
+                    
+                    this.makeLower = function(i) {
+                        if(typeof i == 'undefined') {
+                            i = 1;
+                        }
+                        this.bubble.distance -= (100 * i);
+                        this.chatLine.scaleY -= (0.4 * i);
+                        this.chatLine.distance -= (60 * i);
+                        this.text.distance -= (100 * i);
+                        
+                        this.updatePosition(Game.instance.currentScene.world);
+                    };
                 };
                 
                 var GameEvent = function() {
                     this.initialText = "";
                     this.options = new Array();
+                    this.started = false;
+                    this.gameObject = null;
                     
-                    this.showEvent = function() {
+                    this.bubbles = new Array();
+                    
+                    this.showEvent = function(gameObject) {
                         var game = Game.instance;
+                        this.started = true;
+                        this.gameObject = gameObject;
                         
+                        var chatBubble = new ChatBubble(game.currentScene, gameObject, this.initialText);
+                        chatBubble.show();
+                        chatBubble.event = this;
+                        chatBubble.updatePosition(game.currentScene.world);
+                        this.bubbles.push(chatBubble);
+                        game.currentScene.ui.push(chatBubble);
+                        
+                    };
+                    this.showOptions = function() {
+                        var game = Game.instance;
+                        this.closeBubbles();
+                        for(var i=0;i<this.options.length; i++) {
+                            var optionBubble = new ChatBubble(game.currentScene, game.currentScene.char, this.options[i].text);
+                            optionBubble.event = this;
+                            optionBubble.option = i;
+                            optionBubble.show();
+                            optionBubble.makeLower(i);
+                            optionBubble.updatePosition(game.currentScene.world);
+                            this.bubbles.push(optionBubble);
+                        }
+                    };
+                    this.showAnswer = function(index) {
+                        this.closeBubbles();
+                        if(this.started && this.gameObject !== null) {
+                            var game = Game.instance;
+                            var answer = this.options[index].pickAnswer();
+                            var answerBubble = new ChatBubble(game.currentScene, this.gameObject, answer.text);
+                            answerBubble.show();
+                            answerBubble.updatePosition(game.currentScene.world);
+                            game.currentScene.ui.push(answerBubble);
+                            game.currentScene.char.mood[answer.type] += answer.effect;
+                            
+                            console.log(game.currentScene.char.mood);
+                        }
+                    };
+                    this.closeBubbles = function() {
+                        for(var i=this.bubbles.length -1; i>=0; i--) {
+                            this.bubbles[i].hide();
+                            this.bubbles.splice(i, 1);
+                        }
                     };
                 };
                 var Option = function(text) {
