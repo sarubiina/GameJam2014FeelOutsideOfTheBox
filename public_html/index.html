@@ -38,7 +38,7 @@ and open the template in the editor.
                 enchant();
                 
                 var game = new Game(1024,600);
-                game.preload('img/test_world.png', 'img/world_5000x5000.gif', 'img/kissa.png', 'img/tipu_1000x732.gif', 'img/tipu.gif');
+                game.preload('img/test_world.png', 'img/kissa.png', 'img/tipu_1000x732.gif', 'img/tipu.gif');
                 game.onload = function() {
                     game.scale = 1;
                     game.fps = 20;
@@ -112,6 +112,7 @@ and open the template in the editor.
                         this.addChild(this.title);
                         
                         this.char = new Character(781,602);
+                        this.char.frame = [null];
                         this.addChild(this.char);
                         
                         this.clock = new Clock();
@@ -119,13 +120,51 @@ and open the template in the editor.
                         
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
                         this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
+                        this.addEventListener(Event.RIGHT_BUTTON_DOWN, this.onRightButtonDown);
+                        this.addEventListener(Event.RIGHT_BUTTON_UP, this.onRightButtonUp);
+                        this.addEventListener(Event.LEFT_BUTTON_DOWN, this.onLeftButtonDown);
+                        this.addEventListener(Event.LEFT_BUTTON_UP, this.onLeftButtonUp);
+                        
+                        this.rightButtonDown = false;
+                        this.leftButtonDown = false;
                     },
                     onTouchStart: function(e) {
                         game.replaceScene(game.scenes.start);
                     },
                     onEnterFrame: function(e) {
-                        this.world.rotate(-0.1);
                         this.clock.onEnterFrame(e);
+                        if(this.rightButtonDown) {
+                            this.world.rotate(-0.1);
+                        } else if(this.leftButtonDown) {
+                            this.world.rotate(0.1);
+                        }
+                        
+                    },
+                    onRightButtonDown: function(e) {
+                        if(!this.rightButtonDown) {
+                            this.rightButtonDown = true;
+                            this.char.frame = [0,1,2,3,4,5,6,9,10,11];
+                            this.char.turn(1);
+                        }
+                    },
+                    onRightButtonUp: function(e) {
+                        if(this.rightButtonDown) {
+                            this.rightButtonDown = false;
+                            this.char.frame = [null];
+                        }
+                    },
+                    onLeftButtonDown: function(e) {
+                        if(!this.leftButtonDown) {
+                            this.leftButtonDown = true;
+                            this.char.frame = [0,1,2,3,4,5,6,9,10,11];
+                            this.char.turn(-1);
+                        }
+                    },
+                    onLeftButtonUp: function(e) {
+                        if(this.leftButtonDown) {
+                            this.leftButtonDown = false;
+                            this.char.frame = [null];
+                        }
                     }
                 });
                 
@@ -161,10 +200,16 @@ and open the template in the editor.
                         
                         this.scaleX = 0.15;
                         this.scaleY = 0.15;
+                        this.direction = 1;
                         this.x = gamediv.width() / 2 - this.width / 2;
                         this.y = 115;
                     },
-                    
+                    turn: function(dir) {
+                        if(this.direction !== dir) {
+                            this.direction = -1 * this.direction;
+                            this.scaleX = this.scaleX * -1;
+                        }
+                    },
                     onEnterFrame: function(e) {
                         //this.rotate(1);
                     }
