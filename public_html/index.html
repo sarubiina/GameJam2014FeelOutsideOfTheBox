@@ -38,7 +38,7 @@ and open the template in the editor.
                 enchant();
                 
                 var game = new Game(1024,600);
-                game.preload('img/test_world.png', 'img/kissa.png', 'img/tipu_1000x732.gif', 'img/tipu.gif', 'img/placeholder.gif');
+                game.preload('img/test_world.png', 'img/kissa.png', 'img/tipu_1000x732.gif', 'img/tipu.gif', 'img/kentta_5000.gif');
                 game.onload = function() {
                     game.scale = 1;
                     game.fps = 20;
@@ -59,21 +59,18 @@ and open the template in the editor.
                         
                         this.backgroundColor = '#aaaaaa';
 
-                        this.title = new Label("Feel Outside The Box");
-                        this.title.font = '32px Comic Sans MS';
-                        this.title.width = 330;
-                        this.title.x = gamediv.width() / 2 - this.title.width / 2;
+                        this.world = new World(5000, 5000, 'img/kentta_5000.gif');
+                        this.addChild(this.world);
+                        
+                        this.title = new TitleLabel("Feel Outside The Box");
                         this.title.y = 50;
                         this.addChild(this.title);
                         
                         this.subtitle = new TitleLabel("FGJ2014 - Pohjois-Karjala");
-                        this.subtitle.width = 400;
-                        this.subtitle.x = gamediv.width() / 2 - this.subtitle.width / 2;
                         this.subtitle.y = 150;
+                        this.subtitle.color = 'red';
                         this.addChild(this.subtitle);
                         
-                        this.world = new World(5000, 5000, 'img/placeholder.gif');
-                        this.addChild(this.world);
                         this.char = new Character(781,602);
                         this.addChild(this.char);
                         
@@ -99,15 +96,12 @@ and open the template in the editor.
                     initialize: function() {
                         Scene.apply(this);
                         
-                        this.world = new World(5000, 5000, 'img/placeholder.gif');
+                        this.world = new World(5000, 5000, 'img/kentta_5000.gif');
                         this.addChild(this.world);
-                        
+                        this.originX = this.world.x;
                         this.backgroundColor = '#112255';
 
-                        this.title = new Label("Feel Outside The Box");
-                        this.title.font = '32px Comic Sans MS';
-                        this.title.width = 330;
-                        this.title.x = gamediv.width() / 2 - this.title.width / 2;
+                        this.title = new TitleLabel("Feel Outside The Box");
                         this.title.y = 50;
                         this.addChild(this.title);
                         
@@ -115,8 +109,20 @@ and open the template in the editor.
                         this.char.frame = [null];
                         this.addChild(this.char);
                         
+                        this.cat = new GameObject(765,1984, 'img/kissa.png');
+                        this.cat.frame = [0,1,2,3,4,5];
+                        this.cat.distance = 1750;
+                        this.cat.origX = this.world.x + this.world.width / 2 - this.cat.width/2;
+                        this.cat.origY = this.world.y + this.world.height / 2 - this.cat.height/2;
+                        this.cat.rotate(0);
+                        this.cat.updatePosition();
+                        this.addChild(this.cat);
+                        
                         this.clock = new Clock();
                         this.addChild(this.clock);
+                        
+                        this.dialog = new Dialog("This is test dialog.");
+                        this.addChild(this.dialog);
                         
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
                         this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
@@ -128,8 +134,6 @@ and open the template in the editor.
                         this.rightButtonDown = false;
                         this.leftButtonDown = false;
                         
-                        this.sky = new Object();
-                        this.sky.blue = 0;
                     },
                     
                     updateSkyColor: function() {
@@ -187,8 +191,12 @@ and open the template in the editor.
                         this.updateSkyColor();
                         if(this.rightButtonDown) {
                             this.world.rotate(-0.1);
+                            this.cat.rotate(-0.1);
+                            this.cat.updatePosition();
                         } else if(this.leftButtonDown) {
                             this.world.rotate(0.1);
+                            this.cat.rotate(0.1);
+                            this.cat.updatePosition();
                         }
                         
                     },
@@ -229,7 +237,7 @@ and open the template in the editor.
                         } else if(typeof image === 'object') {
                             this.image = image;
                         }
-                        
+                        this.radius = width / 2;
                         this.scaleX = 1;
                         this.scaleY = 1;
                         this.x = gamediv.width() / 2 - this.width / 2;
@@ -267,13 +275,37 @@ and open the template in the editor.
                     }
                 });
                 
+                var GameObject = Class.create(Sprite, {
+                    game: Game.instance,
+                    initialize: function(width, height, image) {
+                        Sprite.apply(this, [width, height]);
+                        if(typeof image === 'string') {
+                            this.image = game.assets[image];
+                        } else if(typeof image === 'object') {
+                            this.image = image;
+                        }
+                        this.x = gamediv.width() / 2 - this.width / 2;
+                        this.scaleX = 0.2;
+                        this.scaleY = 0.2;
+                        this.distance = 1750;
+                    },
+                    updatePosition: function() {
+                        this.x = this.origX + this.distance * Math.sin(this.rotation * Math.PI / 180);
+                        this.y = this.origY - this.distance * Math.cos(this.rotation * Math.PI / 180);
+                    }
+                });
+                
                 var TitleLabel = Class.create(Label, {
                     game: Game.instance,
                     initialize: function(text) {
                         Label.apply(this, [text]);
                         //this.text = text;
                         this.font = '32px Comic Sans MS';
-                        this.width = 330;
+                        this.color = 'green';
+                        this.backgroundColor = '#000000';
+                        this.textAlign = 'center';
+                        this.width = text.length * 17;
+                        this.x = gamediv.width() / 2 - this.width / 2;
                     }
                 });
                 
@@ -306,6 +338,20 @@ and open the template in the editor.
                             this.time -= 1;
                             this.updateClock();
                         }
+                    }
+                });
+                
+                var Dialog = Class.create(Label, {
+                    game: Game.instance,
+                    initialize: function(text) {
+                        Label.apply(this, [text]);
+                        
+                        this.backgroundColor = 'white';
+                        this.textAlign = 'center';
+                        this.width = text.length * 17;
+                        this.x = gamediv.width() / 2 - this.width / 2;
+                        this.y = 150;
+                        this.font = "32px Comic Sans MS";
                     }
                 });
             };
