@@ -38,7 +38,15 @@ and open the template in the editor.
                 enchant();
                 
                 var game = new Game(1024,600);
-                game.preload('img/test_world.png', 'img/kissa.png', 'img/tipu_1000x732.gif', 'img/tipu.gif', 'img/kentta_5000.gif');
+                game.preload('img/kissa.png', // NPCs
+                             'img/tipu_1000x732.gif',
+                             'img/laatikkohahmoW526.png',
+                             'img/koalaW917.png',
+                             'img/roskisW930.png',
+                             'img/kentta_5000.gif', // UI and other objects
+                             'img/viivaW176.png',
+                             'img/ajatusW142.png',
+                             'img/kuplaW958.png');
                 game.onload = function() {
                     game.scale = 1;
                     game.fps = 20;
@@ -64,11 +72,17 @@ and open the template in the editor.
                         
                         this.title = new TitleLabel("Feel Outside The Box");
                         this.title.y = 50;
+                        this.title.font = "32px Comic Sans MS";
                         this.addChild(this.title);
                         
                         this.subtitle = new TitleLabel("FGJ2014 - Pohjois-Karjala");
                         this.subtitle.y = 150;
                         this.subtitle.color = 'red';
+                        this.addChild(this.subtitle);
+                        
+                        this.subtitle = new TitleLabel("Credits:\r\nNukiuchi, Katariina Pohjola, Muura, Myla");
+                        this.subtitle.y = 250;
+                        this.subtitle.color = 'blue';
                         this.addChild(this.subtitle);
                         
                         this.char = new Character(781,602);
@@ -96,34 +110,54 @@ and open the template in the editor.
                     initialize: function() {
                         Scene.apply(this);
                         
+                        // Define the background or "world" object
                         this.world = new World(5000, 5000, 'img/kentta_5000.gif');
                         this.addChild(this.world);
                         this.originX = this.world.x;
                         this.backgroundColor = '#112255';
-
-                        this.title = new TitleLabel("Feel Outside The Box");
-                        this.title.y = 50;
-                        this.addChild(this.title);
                         
+                        // Define different GameObjects, or NPCs
+                        this.npcs = new Array();
+                        var cat = new GameObject(765,1984, 'img/kissa.png');
+                        cat.distance = 1760;
+                        cat.rotate(20);
+                        this.addChild(cat);
+                        this.npcs.push(cat);
+                        
+                        var coala = new GameObject(917,1084, 'img/koalaW917.png');
+                        coala.distance = 1800;
+                        coala.rotate(cat.rotation + 40);
+                        this.addChild(coala);
+                        this.npcs.push(coala);
+                        
+                        var boxguy = new GameObject(526, 1373, 'img/laatikkohahmoW526.png');
+                        boxguy.distance = 1800;
+                        boxguy.rotate(coala.rotation + 40);
+                        this.addChild(boxguy);
+                        this.npcs.push(boxguy);
+                        
+                        var trashbin = new GameObject(930, 1272, 'img/roskisW930.png');
+                        trashbin.distance = 1808;
+                        trashbin.rotate(boxguy.rotation + 40);
+                        this.addChild(trashbin);
+                        this.npcs.push(trashbin);
+                        
+                        this.rotateObjects(0);
+                        
+                        // Define the Player Character
                         this.char = new Character(781,602);
                         this.char.frame = [null];
                         this.addChild(this.char);
                         
-                        this.cat = new GameObject(765,1984, 'img/kissa.png');
-                        this.cat.frame = [0,1,2,3,4,5];
-                        this.cat.distance = 1750;
-                        this.cat.origX = this.world.x + this.world.width / 2 - this.cat.width/2;
-                        this.cat.origY = this.world.y + this.world.height / 2 - this.cat.height/2;
-                        this.cat.rotate(0);
-                        this.cat.updatePosition();
-                        this.addChild(this.cat);
-                        
+                        // Define UI
                         this.clock = new Clock();
+                        this.clock.timeSpeed = 3;
                         this.addChild(this.clock);
                         
-                        this.dialog = new Dialog("This is test dialog.");
-                        this.addChild(this.dialog);
+                        //this.dialog = new Dialog("This is test dialog.");
+                        //this.addChild(this.dialog);
                         
+                        // Event bindings
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
                         this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
                         this.addEventListener(Event.RIGHT_BUTTON_DOWN, this.onRightButtonDown);
@@ -131,9 +165,16 @@ and open the template in the editor.
                         this.addEventListener(Event.LEFT_BUTTON_DOWN, this.onLeftButtonDown);
                         this.addEventListener(Event.LEFT_BUTTON_UP, this.onLeftButtonUp);
                         
+                        // Flags for input and timers
                         this.rightButtonDown = false;
                         this.leftButtonDown = false;
+                        this.timeElapsedObjects = 0;
+                        this.timeElapsedChar = 0;
                         
+                        // Variables for game speec and such
+                        this.charUpdateSpeed = 0.01;
+                        this.objectUpdateSpeed = 0.25;
+                        this.worldRotationSpeed = 0.15;
                     },
                     
                     updateSkyColor: function() {
@@ -183,47 +224,71 @@ and open the template in the editor.
                         }
                     },
                     
+                    rotateObjects: function(degrees) {
+                        this.world.rotate(degrees);
+                        for(var i=0;i<this.npcs.length; i++) {
+                            this.npcs[i].rotate(degrees);
+                            this.npcs[i].updatePosition(this.world);
+                        }
+                    },
+                    
+                    animateObjects: function(elapsed) {
+                        this.timeElapsedObjects += elapsed * 0.001;
+                        if(this.timeElapsedObjects >= this.objectUpdateSpeed) {
+                            for(var i=0;i<this.npcs.length; i++) {
+                                this.npcs[i].frame++;
+                            }
+                            this.timeElapsedObjects -= this.objectUpdateSpeed;
+                        }
+                    },
+                    
+                    animateChar: function(elapsed) {
+                        this.timeElapsedChar += elapsed * 0.001;
+                        if(this.timeElapsedChar >= this.charUpdateSpeed) {
+                            this.char.frame++;
+                            this.timeElapsedChar -= this.charUpdateSpeed;
+                        }
+                    },
+                    
                     onTouchStart: function(e) {
                         game.replaceScene(game.scenes.start);
                     },
                     onEnterFrame: function(e) {
                         this.clock.onEnterFrame(e);
                         this.updateSkyColor();
+                        this.timeElapsed = this.animateObjects(e.elapsed);
                         if(this.rightButtonDown) {
-                            this.world.rotate(-0.1);
-                            this.cat.rotate(-0.1);
-                            this.cat.updatePosition();
+                            this.rotateObjects(-1 * this.worldRotationSpeed);
+                            this.animateChar(e.elapsed);
                         } else if(this.leftButtonDown) {
-                            this.world.rotate(0.1);
-                            this.cat.rotate(0.1);
-                            this.cat.updatePosition();
+                            this.rotateObjects(this.worldRotationSpeed);
+                            this.animateChar(e.elapsed);
                         }
-                        
                     },
                     onRightButtonDown: function(e) {
                         if(!this.rightButtonDown) {
                             this.rightButtonDown = true;
-                            this.char.frame = [0,1,2,3,4,5,6,9,10,11];
+                            //this.char.frame = [0,1,2,3,4,5,6,9,10,11];
                             this.char.turn(1);
                         }
                     },
                     onRightButtonUp: function(e) {
                         if(this.rightButtonDown) {
                             this.rightButtonDown = false;
-                            this.char.frame = [null];
+                            this.char.frame = 0;
                         }
                     },
                     onLeftButtonDown: function(e) {
                         if(!this.leftButtonDown) {
                             this.leftButtonDown = true;
-                            this.char.frame = [0,1,2,3,4,5,6,9,10,11];
+                            //this.char.frame = [0,1,2,3,4,5,6,9,10,11];
                             this.char.turn(-1);
                         }
                     },
                     onLeftButtonUp: function(e) {
                         if(this.leftButtonDown) {
                             this.leftButtonDown = false;
-                            this.char.frame = [null];
+                            this.char.frame = 0;
                         }
                     }
                 });
@@ -262,7 +327,7 @@ and open the template in the editor.
                         this.scaleY = 0.25;
                         this.direction = 1;
                         this.x = gamediv.width() / 2 - this.width / 2;
-                        this.y = 115;
+                        this.y = 100;
                     },
                     turn: function(dir) {
                         if(this.direction !== dir) {
@@ -285,11 +350,13 @@ and open the template in the editor.
                             this.image = image;
                         }
                         this.x = gamediv.width() / 2 - this.width / 2;
-                        this.scaleX = 0.2;
-                        this.scaleY = 0.2;
+                        this.scaleX = 0.1;
+                        this.scaleY = 0.1;
                         this.distance = 1750;
                     },
-                    updatePosition: function() {
+                    updatePosition: function(world) {
+                        this.origX = world.x + world.width / 2 - this.width/2;
+                        this.origY = world.y + world.height / 2 - this.height/2;
                         this.x = this.origX + this.distance * Math.sin(this.rotation * Math.PI / 180);
                         this.y = this.origY - this.distance * Math.cos(this.rotation * Math.PI / 180);
                     }
@@ -320,6 +387,7 @@ and open the template in the editor.
                         
                         this.font = "32px Comic Sans MS";
                         
+                        this.timeSpeed = 2;
                         this.updateClock();
                     },
                     updateClock: function() {
@@ -330,12 +398,12 @@ and open the template in the editor.
                     },
                     onEnterFrame: function(e) {
                         this.time += e.elapsed * 0.001;
-                        if(this.time >= 1) {
+                        if(this.time >= this.timeSpeed) {
                             this.minutes = (this.minutes + 15) % 60;
                             if(this.minutes === 0) {
                                 this.hours = (this.hours + 1) % 24;
                             }
-                            this.time -= 1;
+                            this.time -= this.timeSpeed;
                             this.updateClock();
                         }
                     }
