@@ -38,7 +38,7 @@ and open the template in the editor.
                 enchant();
                 
                 var game = new Game(1024,600);
-                game.preload('img/test_world.png', 'img/kissa.png');
+                game.preload('img/test_world.png', 'img/world_5000x5000.gif', 'img/kissa.png', 'img/tipu_1000x732.gif', 'img/tipu.gif');
                 game.onload = function() {
                     game.scale = 1;
                     game.fps = 20;
@@ -69,6 +69,10 @@ and open the template in the editor.
                         this.subtitle.y = 150;
                         this.addChild(this.subtitle);
                         
+                        this.char = new Character(781,602, game.assets['img/tipu_1000x732.gif']);
+                        this.char.frame = [0,1,2,3,4,5,6,9,10,11];
+                        this.addChild(this.char);
+                        
                         this.world = new Sprite(1000, 1000);
                         this.world.image = game.assets['img/test_world.png'];
                         this.world.scaleX = 5;
@@ -77,9 +81,6 @@ and open the template in the editor.
                         this.world.y = 2450;
                         this.addChild(this.world);
                         
-                        this.char = new Character(765,1984, 'img/kissa.png');
-                        this.char.frame = [0,1,2,3,5,6,7];
-                        this.addChild(this.char);
                         
                         
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
@@ -90,8 +91,32 @@ and open the template in the editor.
                         
                     },
                     onEnterFrame: function(e) {
-                        this.char.onEnterFrame(e);
+                        //this.char.onEnterFrame(e);
                         this.world.rotate(-0.1);
+                    }
+                });
+                
+                var GameScene = Class.create(Scene, {
+                    game: Game.instance,
+                    initialize: function() {
+                        Scene.apply(this);
+                        
+                        this.world = new Sprite(5000, 5000);
+                        this.world.image = game.assets['img/world_5000x5000.gif'];
+                        this.world.scaleX = 1;
+                        this.world.scaleY = 1;
+                        this.world.x = gamediv.width() / 2 - this.world.width / 2;
+                        this.world.y = 2450;
+                        this.addChild(this.world);
+                        
+                        this.backgroundColor = '#dddddd';
+
+                        this.title = new Label("Feel Outside The Box");
+                        this.title.font = '32px Comic Sans MS';
+                        this.title.width = 330;
+                        this.title.x = gamediv.width() / 2 - this.title.width / 2;
+                        this.title.y = 50;
+                        this.addChild(this.title);
                     }
                 });
                 
@@ -105,16 +130,17 @@ and open the template in the editor.
                             this.image = image;
                         }
                         
-                        this.scaleX = 0.1;
-                        this.scaleY = 0.1;
+                        this.scaleX = 0.15;
+                        this.scaleY = 0.15;
                         this.x = gamediv.width() / 2 - this.width / 2;
-                        this.y = -550;
+                        this.y = 115;
                     },
                     
                     onEnterFrame: function(e) {
-                        this.rotate(1);
+                        //this.rotate(1);
                     }
                 });
+                
                 
                 var TitleLabel = Class.create(Label, {
                     game: Game.instance,
