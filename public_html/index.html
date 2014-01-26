@@ -27,7 +27,7 @@ and open the template in the editor.
                     <ul>
                         <li>Coded by <span class="credit">Katariina Pohjola</span> and <span class="credit">Nukiuchi</span></li>
                         <li>Graphics by <span class="credit">Muura</span> and <span class="credit">Myla</span></li>
-                        <li>Audio by <span class="credit">Tapani INSERT_NICK_HERE</span> and <span class="credit">INSERT_NICK_HERE</span></li>
+                        <li>Audio by <span class="credit">Taneli</span> and <span class="credit">Markus</span></li>
                     </ul>
                 </li>
             </ul>
@@ -53,12 +53,16 @@ and open the template in the editor.
                              'img/title.gif', // Fullscreen images
                              /*'img/credits.gif',*/
                              'img/happydream.gif',
-                             'img/saddream.gif'
-                             /*'img/angrydream.gif',
-                             'img/neutraldream.gif'*/);
+                             'img/saddream.gif',
+                             'img/angrydream.gif',
+                             /*'img/neutraldream.gif'*/
+                             'audio/Angry_mood.mp3', // Audio
+                             'audio/Happy_mood.mp3',
+                             'audio/Rainy_mood.mp3',
+                             'audio/Superb_mood.mp3');
                 game.onload = function() {
                     game.scale = 1;
-                    game.fps = 25;
+                    game.fps = 30;
                     game.scenes = new Object();
                     
                     var startScene = new StartScene();
@@ -383,14 +387,71 @@ and open the template in the editor.
                         
                         // Initialize objects
                         this.rotateObjects(0);
+                        
+                        this.bgm = game.assets['audio/Happy_mood.mp3'];
+                        this.bgm.play();
                     },
                     updateSkyColor: function() {
                         var hours = this.clock.hours;
+                        var mood = this.char.mood;
+                        var moodMod;
+                        if(mood.happy > mood.angry && mood.happy > mood.sad) {
+                            moodMod = Types.happy;
+                        } else if(mood.angry > mood.happy && mood.angry > mood.sad) {
+                            moodMod = Types.angry;
+                        } else if(mood.sad > mood.angry && mood.sad > mood.happy) {
+                            moodMod = Types.sad;
+                        } else {
+                            moodMod = Types.neutral;
+                        }
                         if(hours > 22 || hours < 6) {
                             // Night
-                            this.backgroundColor = '#000011';
+                            if(moodMod == Types.angry) {
+                                this.backgroundColor = '#330000';
+                            } else if(moodMod == Types.sad) {
+                                this.backgroundColor = '#030303';
+                            } else {
+                                this.backgroundColor = '#000011';
+                            }
                         } else if(hours >= 6 && hours < 11) {
-                            switch(hours) {
+                            if(moodMod == Types.angry) {
+                                switch(hours) {
+                                case 6:
+                                    this.backgroundColor = '#440000';
+                                    break;
+                                case 7:
+                                    this.backgroundColor = '#660000';
+                                    break;
+                                case 8:
+                                    this.backgroundColor = '#AA1100';
+                                    break;
+                                case 9:
+                                    this.backgroundColor = '#CC1100';
+                                    break;
+                                case 10:
+                                    this.backgroundColor = '#DD1100';
+                                    break;
+                            }
+                            } else if(moodMod == Types.sad) {
+                                switch(hours) {
+                                case 6:
+                                    this.backgroundColor = '#101010';
+                                    break;
+                                case 7:
+                                    this.backgroundColor = '#222222';
+                                    break;
+                                case 8:
+                                    this.backgroundColor = '#444444';
+                                    break;
+                                case 9:
+                                    this.backgroundColor = '#777777';
+                                    break;
+                                case 10:
+                                    this.backgroundColor = '#999999';
+                                    break;
+                            }
+                            } else {
+                                switch(hours) {
                                 case 6:
                                     this.backgroundColor = '#111122';
                                     break;
@@ -407,8 +468,46 @@ and open the template in the editor.
                                     this.backgroundColor = '#99DDDD';
                                     break;
                             }
+                            }
                         } else if(hours >= 18 && hours <= 22) {
-                            switch(hours) {
+                            if(moodMod == Types.angry) {
+                                switch(hours) {
+                                    case 18:
+                                        this.backgroundColor = '#DD1100';
+                                        break;
+                                    case 19:
+                                        this.backgroundColor = '#CC1100';
+                                        break;
+                                    case 20:
+                                        this.backgroundColor = '#AA1100';
+                                        break;
+                                    case 21:
+                                        this.backgroundColor = '#660000';
+                                        break;
+                                    case 22:
+                                        this.backgroundColor = '#440000';
+                                        break;
+                                }
+                            } else if(moodMod == Types.sad) {
+                                switch(hours) {
+                                    case 18:
+                                        this.backgroundColor = '#999999';
+                                        break;
+                                    case 19:
+                                        this.backgroundColor = '#777777';
+                                        break;
+                                    case 20:
+                                        this.backgroundColor = '#444444';
+                                        break;
+                                    case 21:
+                                        this.backgroundColor = '#222222';
+                                        break;
+                                    case 22:
+                                        this.backgroundColor = '#101010';
+                                        break;
+                                }
+                            } else {
+                                switch(hours) {
                                 case 18:
                                     this.backgroundColor = '#99DDDD';
                                     break;
@@ -424,10 +523,17 @@ and open the template in the editor.
                                 case 22:
                                     this.backgroundColor = '#111122';
                                     break;
+                                }
                             }
                         } else {
                             // Day
-                            this.backgroundColor = '#BBFFFF';
+                            if(moodMod == Types.angry) {
+                                this.backgroundColor = '#DD1111';
+                            } else if(moodMod == Types.sad) {
+                                this.backgroundColor = '#AAAAAA';
+                            } else {
+                                this.backgroundColor = '#BBFFFF';
+                            }
                         }
                     },
                     
@@ -473,8 +579,13 @@ and open the template in the editor.
                         //this.charChat.hide();
                     },
                     onEnterFrame: function(e) {
+                        //Update clock
                         this.clock.onEnterFrame(e);
+                        
+                        // Update sky
                         this.updateSkyColor();
+                        
+                        // Move world and objects
                         this.timeElapsed = this.animateObjects(e.elapsed);
                         if(this.rightButtonDown) {
                             this.rotateObjects(-1 * this.worldRotationSpeed);
@@ -483,16 +594,29 @@ and open the template in the editor.
                             this.rotateObjects(this.worldRotationSpeed);
                             this.animateChar(e.elapsed);
                         }
+                        
+                        // Check for NPC nearby
                         var npc = this.checkCollision();
                         if(npc !== null) {
                             npc.startEvent();
                         }
+                        
+                        // End timer
                         if(this.char.events >= 7) {
                             this.timeElapsedEnd += e.elapsed * 0.001;
                             if(this.timeElapsedEnd >= this.endSpeed) {
                                 var endScene = new EndScene(this.char.mood);
                                 this.game.replaceScene(endScene);
                             }
+                        }
+                        
+                        // Background music loop
+                        if(this.bgm.currentTime >= this.bgm.duration) {
+                            this.bgm.stop();
+                            this.bgm.play();
+                        } else if(this.bgm != game.assets['audio/Rainy_mood.mp3'] && this.bgm.currentTime >= this.bgm.duration -1) {
+                            this.bgm.stop();
+                            this.bgm.play();
                         }
                     },
                     onRightButtonDown: function(e) {
@@ -531,12 +655,22 @@ and open the template in the editor.
                         
                         if(mood.happy > mood.angry && mood.happy > mood.sad) {
                             this.dream.image = game.assets['img/happydream.gif'];
+                            game.currentScene.bgm.stop();
+                            this.bgm = game.assets['audio/Happy_mood.mp3'];
+                            this.bgm.play();
                         } else if(mood.angry > mood.happy && mood.angry > mood.sad) {
-                            this.dream.image = game.assets['img/happydream.gif'];
+                            this.dream.image = game.assets['img/angrydream.gif'];
+                            game.currentScene.bgm.stop();
+                            this.bgm = game.assets['audio/Angry_mood.mp3'];
+                            this.bgm.play();
                         } else if(mood.sad > mood.angry && mood.sad > mood.happy) {
                             this.dream.image = game.assets['img/saddream.gif'];
+                            game.currentScene.bgm.stop();
+                            this.bgm = game.assets['audio/Rainy_mood.mp3'];
+                            this.bgm.play();
                         } else {
                             this.dream.image = game.assets['img/happydream.gif'];
+                            game.currentScene.bgm.stop();
                         }
                         
                         this.addChild(this.dream);
@@ -552,9 +686,19 @@ and open the template in the editor.
                             this.dream.frame++;
                             this.timeElapsed = 0;
                         }
+                        
+                        // Background music loop
+                        if(this.bgm != null && this.bgm.currentTime >= this.bgm.duration) {
+                            this.bgm.stop();
+                            this.bgm.play();
+                        } else if(this.bgm != game.assets['audio/Rainy_mood.mp3'] && this.bgm.currentTime >= this.bgm.duration -1) {
+                            this.bgm.stop();
+                            this.bgm.play();
+                        }
                     },
                     onTouchStart: function(e) {
                         var creditsScene = new CreditsScene();
+                        this.bgm.stop();
                         this.game.replaceScene(creditsScene);
                     }
                 });
@@ -572,6 +716,9 @@ and open the template in the editor.
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
                         
                         this.timeElapsed = 0;
+                        
+                        this.bgm = game.assets['audio/Superb_mood.mp3'];
+                        this.bgm.play();
                     },
                     onFrameEntered: function(e) {
                         this.timeElapsed += e.elapsed * 0.001;
@@ -579,10 +726,16 @@ and open the template in the editor.
                             this.credits.frame++;
                             this.timeElapsed = 0;
                         }
+                        
+                        // Background music loop
+                        if(this.bgm.currentTime >= this.bgm.duration) {
+                            this.bgm.stop();
+                            this.bgm.play();
+                        }
                     },
                     onTouchStart: function(e) {
-                        var startScene = new StartScene();
-                        this.game.replaceScene(startScene);
+                        //var startScene = new StartScene();
+                        //this.game.replaceScene(startScene);
                     }
                 });
                 
@@ -813,12 +966,31 @@ and open the template in the editor.
                             switch(answer.type) {
                                 case Types.happy:
                                     game.currentScene.char.image = game.assets['img/tipu_1000x732.gif'];
+                                    if(game.currentScene.bgm == game.assets['audio/Happy_mood.mp3']) {
+                                        game.currentScene.bgm.stop();
+                                        game.currentScene.bgm = game.assets['audio/Superb_mood.mp3'];
+                                        game.currentScene.bgm.play();
+                                    } else {
+                                        game.currentScene.bgm.stop();
+                                        game.currentScene.bgm = game.assets['audio/Happy_mood.mp3'];
+                                        game.currentScene.bgm.play();
+                                    }
                                     break;
                                 case Types.angry:
                                     game.currentScene.char.image = game.assets['img/tipuvihanen.gif'];
+                                    if(game.currentScene.bgm != game.assets['audio/Angry_mood.mp3']) {
+                                        game.currentScene.bgm.stop();
+                                        game.currentScene.bgm = game.assets['audio/Angry_mood.mp3'];
+                                        game.currentScene.bgm.play();
+                                    }
                                     break;
                                 case Types.sad:
                                     game.currentScene.char.image = game.assets['img/tipusurullinen.gif'];
+                                    if(game.currentScene.bgm != game.assets['audio/Rainy_mood.mp3']) {
+                                        game.currentScene.bgm.stop();
+                                        game.currentScene.bgm = game.assets['audio/Rainy_mood.mp3'];
+                                        game.currentScene.bgm.play();
+                                    }
                                     break;
                             }
                             
