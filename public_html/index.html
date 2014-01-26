@@ -49,6 +49,7 @@ and open the template in the editor.
                              'img/koalaW917.png',
                              'img/roskisW930.png',
                              'img/mummo-619-x-850b.gif',
+                             'img/tipuntalo.png',
                              'img/kentta_5000.gif', // UI and other objects
                              'img/viivaW176.png',
                              'img/ajatusW142.png',
@@ -59,7 +60,7 @@ and open the template in the editor.
                              'img/happydream.gif',
                              'img/saddream.gif',
                              'img/angrydream.gif',
-                             /*'img/neutraldream.gif'*/
+                             'img/neutraldream.gif',
                              'audio/Angry_mood.mp3', // Audio
                              'audio/Happy_mood.mp3',
                              'audio/Rainy_mood.mp3',
@@ -151,7 +152,7 @@ and open the template in the editor.
                         var catEvent = new GameEvent();
                         catEvent.initialText = "Purrrrrrr.";
                         var option1 = new Option("Oh, please do not eat me...");
-                        var o1_answer1 = new Answer("I am quite full, thank you very much.", Types.happy, 1);
+                        var o1_answer1 = new Answer("I am quite full, thank you very much.", Types.happy, 2);
                         var o1_answer2 = new Answer("You are not enough even for a snack.", Types.sad, 1);
                         option1.answers.push(o1_answer1);
                         option1.answers.push(o1_answer2);
@@ -162,7 +163,7 @@ and open the template in the editor.
                         option2.answers.push(o2_answer2);
                         var option3 = new Option("Why did the chicken cross the road?");
                         var o3_answer1 = new Answer("To get out of my sight, smelling like a hay-     stack in a ditch...", Types.angry, 1);
-                        var o3_answer2 = new Answer("Better question is, why did you not?", Types.angry, 2);
+                        var o3_answer2 = new Answer("Better question is, why did you not?", Types.angry, 1);
                         option3.answers.push(o3_answer1);
                         option3.answers.push(o3_answer2);
                         catEvent.options.push(option1);
@@ -181,17 +182,17 @@ and open the template in the editor.
                         coalaEvent.initialText = "Cheers matey!";
                         var option1 = new Option("Hey, how's it going down in Australia?");
                         var o1_answer1 = new Answer("I dunno man, never been. Captive all my life.", Types.sad, 2);
-                        var o1_answer2 = new Answer("I dunno man, never been. Go see for yerself if yer that interested.", Types.angry, 2);
+                        var o1_answer2 = new Answer("I dunno man, never been. Go see for yerself if yer that interested.", Types.angry, 1);
                         option1.answers.push(o1_answer1);
                         option1.answers.push(o1_answer2);
                         var option2 = new Option("You're so cute!");
-                        var o2_answer1 = new Answer("I know man, I know.", Types.happy, 1);
-                        var o2_answer2 = new Answer("Ye think? Can't say the same from you,          though.", Types.angry, 2);
+                        var o2_answer1 = new Answer("I know man, I know.", Types.happy, 2);
+                        var o2_answer2 = new Answer("Ye think? Can't say the same from you,          though.", Types.angry, 1);
                         option2.answers.push(o2_answer1);
                         option2.answers.push(o2_answer2);
                         var option3 = new Option("Heh. Dropbears.");
                         var o3_answer1 = new Answer("Ha. Ha. So very funny. Not.", Types.angry, 2);
-                        var o3_answer2 = new Answer("Ye think that's funny man, but my pa got      killed in a dropbear accident.", Types.sad, 2);
+                        var o3_answer2 = new Answer("Ye think that's funny man, but my pa got      killed in a dropbear accident.", Types.sad, 1);
                         option3.answers.push(o3_answer1);
                         option3.answers.push(o3_answer2);
                         coalaEvent.options.push(option1);
@@ -214,13 +215,13 @@ and open the template in the editor.
                         option1.answers.push(o1_answer1);
                         option1.answers.push(o1_answer2);
                         var option2 = new Option("Can I help you?");
-                        var o2_answer1 = new Answer("Oh, you think you're SO HELPFUL now, do   you? Well la dee dah! Goody two shoes on theloose!", Types.angry, 2);
-                        var o2_answer2 = new Answer("Oh you're one of those. Wanna help every-   one. Getting the good karma! Make everyone happy! Ain't you one bloody goody two            shoes...", Types.angry, 2);
+                        var o2_answer1 = new Answer("Oh, you think you're SO HELPFUL now, do   you? Well la dee dah! Goody two shoes on theloose!", Types.angry, 1);
+                        var o2_answer2 = new Answer("Oh you're one of those. Wanna help every-   one. Getting the good karma! Make everyone happy! Ain't you one bloody goody two            shoes...", Types.angry, 1);
                         option2.answers.push(o2_answer1);
                         option2.answers.push(o2_answer2);
                         var option3 = new Option("How come you're shaped like a box?");
-                        var o3_answer1 = new Answer("I was born like this. Hard to fit in 'round     places. It's inside what counts, though.", Types.happy, 1);
-                        var o3_answer2 = new Answer("I was born like this. Makes the life hard, no round place I could fit through.", Types.sad, 2);
+                        var o3_answer1 = new Answer("I was born like this. Hard to fit in 'round     places. It's inside what counts, though.", Types.happy, 2);
+                        var o3_answer2 = new Answer("I was born like this. Makes the life hard, no round place I could fit through.", Types.sad, 1);
                         option3.answers.push(o3_answer1);
                         option3.answers.push(o3_answer2);
                         boxEvent.options.push(option1);
@@ -238,13 +239,13 @@ and open the template in the editor.
                         var trashEvent = new GameEvent();
                         trashEvent.initialText = "...";
                         var option1 = new Option("<Kick it.>");
-                        var o1_answer1 = new Answer("Ow! What'd you do that for, you bloody        idiot?!", Types.angry, 2);
+                        var o1_answer1 = new Answer("Ow! What'd you do that for, you bloody        idiot?!", Types.angry, 1);
                         var o1_answer2 = new Answer("Ahh, that hit the itch. Thanks dude!", Types.happy, 2);
                         option1.answers.push(o1_answer1);
                         option1.answers.push(o1_answer2);
                         var option2 = new Option("I'm so hungry... I wonder if there's anything there.");
                         var o2_answer1 = new Answer("Lots of yummy stuff in here. Old diapers      smell just delicious!", Types.sad, 1);
-                        var o2_answer2 = new Answer("Like this hambuger that was dumped here     like couple minutes ago? Sorry, but my          lodgers already ate bites out of it.", Types.sad, 1);
+                        var o2_answer2 = new Answer("Like this hambuger that was dumped here     like couple minutes ago? Sorry, but my          lodgers already ate bites out of it.", Types.sad, 2);
                         option2.answers.push(o2_answer1);
                         option2.answers.push(o2_answer2);
                         var option3 = new Option("Oh, I should leave my candy wrappings here.");
@@ -269,18 +270,18 @@ and open the template in the editor.
                         var grannyEvent = new GameEvent();
                         grannyEvent.initialText = "Hello there, youngin'!";
                         var option1 = new Option("Hello there, grandma. Need help crossing the street?");
-                        var o1_answer1 = new Answer("Well I never! I still got spring in these         bones! I can cross a road or few just fine!", Types.angry, 2);
+                        var o1_answer1 = new Answer("Well I never! I still got spring in these         bones! I can cross a road or few just fine!", Types.angry, 1);
                         var o1_answer2 = new Answer("How dare you call me grandma, I still remem-ber my days as teenager like it was only        yesterday!", Types.angry, 1);
                         option1.answers.push(o1_answer1);
                         option1.answers.push(o1_answer2);
                         var option2 = new Option("Such a terrible weather.");
                         var o2_answer1 = new Answer("It sure is. Days like these, I'm glad I have    my vodka to keep my old achin' bones warm!", Types.happy, 2);
-                        var o2_answer2 = new Answer("And thanks to whiny people like you it          doesn't get any better, either.", Types.angry, 2);
+                        var o2_answer2 = new Answer("And thanks to whiny people like you it          doesn't get any better, either.", Types.angry, 1);
                         option2.answers.push(o2_answer1);
                         option2.answers.push(o2_answer2);
                         var option3 = new Option("What's on your mind?");
                         var o3_answer1 = new Answer("My dead wife, Pirkko... Oh Pirkko, you used to make me laugh so.", Types.sad, 2);
-                        var o3_answer2 = new Answer("Life is so dark nowadays, without my trust- worthy dog Vuppe...", Types.sad, 2);
+                        var o3_answer2 = new Answer("Life is so dark nowadays, without my trust- worthy dog Vuppe...", Types.sad, 1);
                         option3.answers.push(o3_answer1);
                         option3.answers.push(o3_answer2);
                         grannyEvent.options.push(option1);
@@ -298,18 +299,18 @@ and open the template in the editor.
                         var catEvent = new GameEvent();
                         catEvent.initialText = "Purrrrrrr.";
                         var option1 = new Option("Oh, please do not eat me...");
-                        var o1_answer1 = new Answer("I am quite full, thank you very much.", Types.happy, 1);
-                        var o1_answer2 = new Answer("You are not enough even for a snack.", Types.sad, 1);
+                        var o1_answer1 = new Answer("I am quite full, thank you very much.", Types.happy, 2);
+                        var o1_answer2 = new Answer("You are not enough even for a snack.", Types.sad, 2);
                         option1.answers.push(o1_answer1);
                         option1.answers.push(o1_answer2);
                         var option2 = new Option("Ah, cats are so beautiful!");
-                        var o2_answer1 = new Answer("I know. Sucks that you will never be as         beautiful as I am, huh?", Types.sad, 2);
+                        var o2_answer1 = new Answer("I know. Sucks that you will never be as         beautiful as I am, huh?", Types.sad, 1);
                         var o2_answer2 = new Answer("Purrrr, and your wish was to pet me, yes?", Types.happy, 2);
                         option2.answers.push(o2_answer1);
                         option2.answers.push(o2_answer2);
                         var option3 = new Option("Why did the chicken cross the road?");
                         var o3_answer1 = new Answer("To get out of my sight, smelling like a hay-     stack in a ditch...", Types.angry, 1);
-                        var o3_answer2 = new Answer("Better question is, why did you not?", Types.angry, 2);
+                        var o3_answer2 = new Answer("Better question is, why did you not?", Types.angry, 1);
                         option3.answers.push(o3_answer1);
                         option3.answers.push(o3_answer2);
                         catEvent.options.push(option1);
@@ -327,7 +328,7 @@ and open the template in the editor.
                         var trashEvent = new GameEvent();
                         trashEvent.initialText = "...";
                         var option1 = new Option("<Kick it.>");
-                        var o1_answer1 = new Answer("Ow! What'd you do that for, you bloody        idiot?!", Types.angry, 2);
+                        var o1_answer1 = new Answer("Ow! What'd you do that for, you bloody        idiot?!", Types.angry, 1);
                         var o1_answer2 = new Answer("Ahh, that hit the itch. Thanks dude!", Types.happy, 2);
                         option1.answers.push(o1_answer1);
                         option1.answers.push(o1_answer2);
@@ -348,6 +349,16 @@ and open the template in the editor.
                         trashbin.event = trashEvent;
                         this.addChild(trashbin);
                         this.npcs.push(trashbin);
+                        
+                        this.end = new GameObject(313, 405, 'img/tipuntalo.png');
+                        this.end.scaleX = 1;
+                        this.end.scaleY = 1;
+                        this.end.distance = 1900;
+                        this.end.rotate(trashbin.rotation + 30);
+                        this.end.added = false;
+                        this.end.ended = false;
+                        //this.addChild(this.end);
+                        this.npcs.push(this.end);
                         
                         // Define the Player Character
                         this.char = new Character(781,602);
@@ -396,7 +407,8 @@ and open the template in the editor.
                         this.objectUpdateSpeed = 0.1;
                         this.worldRotationSpeed = 0.15;
                         this.collisionDistance = 150;
-                        this.endSpeed = 10;
+                        this.endCollisionDistance = 180;
+                        this.endFadeTime = 6;
                         
                         // Initialize objects
                         this.rotateObjects(0);
@@ -600,7 +612,9 @@ and open the template in the editor.
                         
                         // Move world and objects
                         this.timeElapsed = this.animateObjects(e.elapsed);
-                        if(this.rightButtonDown) {
+                        if(this.end.ended) {
+                            
+                        } else if(this.rightButtonDown) {
                             this.rotateObjects(-1 * this.worldRotationSpeed);
                         } else if(this.leftButtonDown) {
                             this.rotateObjects(this.worldRotationSpeed);
@@ -613,12 +627,41 @@ and open the template in the editor.
                             npc.startEvent();
                         }
                         
-                        // End timer
+                        // End
                         if(this.char.events >= 7) {
-                            this.timeElapsedEnd += e.elapsed * 0.001;
-                            if(this.timeElapsedEnd >= this.endSpeed) {
-                                var endScene = new EndScene(this.char.mood);
-                                this.game.replaceScene(endScene);
+                            if(!this.end.added) {
+                                this.addChild(this.end);
+                                this.end.added = true;
+                            }
+                            
+                            if(this.char.within(this.end, this.endCollisionDistance)) {
+                                switch(this.char.moodMod) {
+                                    case Types.happy:
+                                    case Types.neutral:
+                                        this.char.image = game.assets['img/tipu_idle_happy.png'];
+                                        this.charUpdateSpeed = 0.2;
+                                        break;
+                                    case Types.angry:
+                                        this.char.image = game.assets['img/tipu_idle_angry.png'];
+                                        this.charUpdateSpeed = 0.2;
+                                        break;
+                                    case Types.sad:
+                                        this.char.image = game.assets['img/tipu_idle_sad.png'];
+                                        this.charUpdateSpeed = 0.2;
+                                        break;
+                                }
+                                if(!this.end.ended) {
+                                    this.char.tl.fadeOut(this.endFadeTime*30, enchant.Easing.BACK_EASEOUT);
+                                    this.end.ended = true;
+                                }
+                            }
+                            
+                            if(this.end.ended) {
+                                this.timeElapsedEnd += e.elapsed * 0.001;
+                                if(this.timeElapsedEnd >= this.endFadeTime/3) {
+                                    var endScene = new EndScene(this.char.mood);
+                                    game.replaceScene(endScene);
+                                }
                             }
                         }
                         
@@ -745,7 +788,7 @@ and open the template in the editor.
                             this.bgm = game.assets['audio/Rainy_mood.mp3'];
                             this.bgm.play();
                         } else {
-                            this.dream.image = game.assets['img/happydream.gif'];
+                            this.dream.image = game.assets['img/neutraldream.gif'];
                             game.currentScene.bgm.stop();
                         }
                         
@@ -767,14 +810,16 @@ and open the template in the editor.
                         if(this.bgm != null && this.bgm.currentTime >= this.bgm.duration) {
                             this.bgm.stop();
                             this.bgm.play();
-                        } else if(this.bgm != game.assets['audio/Rainy_mood.mp3'] && this.bgm.currentTime >= this.bgm.duration -1) {
+                        } else if(this.bgm != null && this.bgm != game.assets['audio/Rainy_mood.mp3'] && this.bgm.currentTime >= this.bgm.duration -1) {
                             this.bgm.stop();
                             this.bgm.play();
                         }
                     },
                     onTouchStart: function(e) {
                         var creditsScene = new CreditsScene();
-                        this.bgm.stop();
+                        if(this.bgm != null) {
+                            this.bgm.stop();
+                        }
                         this.game.replaceScene(creditsScene);
                     }
                 });
@@ -939,8 +984,8 @@ and open the template in the editor.
                     this.bubble.parent = this;
                     this.chatLine = new GameUIObject(176, 280, 'img/viivaW176.png');
                     this.chatLine.rotate(gameObject.rotation - 1);
-                    this.chatLine.distance = 1995;
-                    this.chatLine.scaleY = 0.8;
+                    this.chatLine.distance = 2013;
+                    this.chatLine.scaleY = 0.6;
                     this.chatLine.parent = this;
                     this.text = new ChatLabel(text);
                     this.text.rotate(gameObject.rotation);
