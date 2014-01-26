@@ -39,8 +39,11 @@ and open the template in the editor.
                 
                 var game = new Game(1024,600);
                 game.preload('img/tipu_1000x732.gif', // Player Character
+                             'img/tipu_idle_happy.png',
                              'img/tipuvihanen.gif',
+                             'img/tipu_idle_angry.png',
                              'img/tipusurullinen.gif',
+                             'img/tipu_idle_sad.png',
                              'img/kissa.png', // NPCs
                              'img/laatikkohahmoW526.png',
                              'img/koalaW917.png',
@@ -50,6 +53,7 @@ and open the template in the editor.
                              'img/viivaW176.png',
                              'img/ajatusW142.png',
                              'img/kuplaW958.png',
+                             'img/valinnat.png',
                              'img/title.gif', // Fullscreen images
                              /*'img/credits.gif',*/
                              'img/happydream.gif',
@@ -264,7 +268,7 @@ and open the template in the editor.
                         
                         var grannyEvent = new GameEvent();
                         grannyEvent.initialText = "Hello there, youngin'!";
-                        var option1 = new Option("Hello there, grandma. Need help crossing        the street?");
+                        var option1 = new Option("Hello there, grandma. Need help crossing the street?");
                         var o1_answer1 = new Answer("Well I never! I still got spring in these         bones! I can cross a road or few just fine!", Types.angry, 2);
                         var o1_answer2 = new Answer("How dare you call me grandma, I still remem-ber my days as teenager like it was only        yesterday!", Types.angry, 1);
                         option1.answers.push(o1_answer1);
@@ -363,6 +367,15 @@ and open the template in the editor.
                         this.charChat.show();
                         this.charChat.updatePosition(this.world);
                         
+                        this.rightButton = new Button(this, ' - ->', this.onRightButtonDown, this.onRightButtonUp);
+                        this.rightButton.setX(70);
+                        this.rightButton.setY(480);
+                        this.rightButton.show();
+                        this.leftButton = new Button(this, '<- -', this.onLeftButtonDown, this.onLeftButtonUp);
+                        this.leftButton.setX(-10);
+                        this.leftButton.setY(480);
+                        this.leftButton.show();
+                        
                         // Event bindings
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
                         this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
@@ -379,7 +392,7 @@ and open the template in the editor.
                         this.timeElapsedEnd = 0;
                         
                         // Variables for game speed and such
-                        this.charUpdateSpeed = 0.01;
+                        this.charUpdateSpeed = 0.2;
                         this.objectUpdateSpeed = 0.1;
                         this.worldRotationSpeed = 0.15;
                         this.collisionDistance = 150;
@@ -589,11 +602,10 @@ and open the template in the editor.
                         this.timeElapsed = this.animateObjects(e.elapsed);
                         if(this.rightButtonDown) {
                             this.rotateObjects(-1 * this.worldRotationSpeed);
-                            this.animateChar(e.elapsed);
                         } else if(this.leftButtonDown) {
                             this.rotateObjects(this.worldRotationSpeed);
-                            this.animateChar(e.elapsed);
                         }
+                        this.animateChar(e.elapsed);
                         
                         // Check for NPC nearby
                         var npc = this.checkCollision();
@@ -620,29 +632,93 @@ and open the template in the editor.
                         }
                     },
                     onRightButtonDown: function(e) {
-                        if(!this.rightButtonDown) {
-                            this.rightButtonDown = true;
+                        var scene = game.currentScene;
+                        if(!scene.rightButtonDown) {
+                            scene.rightButtonDown = true;
                             //this.char.frame = [0,1,2,3,4,5,6,9,10,11];
-                            this.char.turn(1);
+                            switch(scene.char.moodMod) {
+                                case Types.happy:
+                                case Types.neutral:
+                                    scene.char.image = game.assets['img/tipu_1000x732.gif'];
+                                    scene.charUpdateSpeed = 0.01;
+                                    break;
+                                case Types.angry:
+                                    scene.char.image = game.assets['img/tipuvihanen.gif'];
+                                    scene.charUpdateSpeed = 0.01;
+                                    break;
+                                case Types.sad:
+                                    scene.char.image = game.assets['img/tipusurullinen.gif'];
+                                    scene.charUpdateSpeed = 0.01;
+                                    break;
+                            }
+                            scene.char.turn(1);
                         }
                     },
                     onRightButtonUp: function(e) {
-                        if(this.rightButtonDown) {
-                            this.rightButtonDown = false;
-                            this.char.frame = 0;
+                        var scene = game.currentScene;
+                        if(scene.rightButtonDown) {
+                            scene.rightButtonDown = false;
+                            switch(scene.char.moodMod) {
+                                case Types.happy:
+                                case Types.neutral:
+                                    scene.char.image = game.assets['img/tipu_idle_happy.png'];
+                                    scene.charUpdateSpeed = 0.2;
+                                    break;
+                                case Types.angry:
+                                    scene.char.image = game.assets['img/tipu_idle_angry.png'];
+                                    scene.charUpdateSpeed = 0.2;
+                                    break;
+                                case Types.sad:
+                                    scene.char.image = game.assets['img/tipu_idle_sad.png'];
+                                    scene.charUpdateSpeed = 0.2;
+                                    break;
+                            }
+                            //scene.char.frame = 0;
                         }
                     },
                     onLeftButtonDown: function(e) {
-                        if(!this.leftButtonDown) {
-                            this.leftButtonDown = true;
+                        var scene = game.currentScene;
+                        if(!scene.leftButtonDown) {
+                            scene.leftButtonDown = true;
+                            switch(scene.char.moodMod) {
+                                case Types.happy:
+                                case Types.neutral:
+                                    scene.char.image = game.assets['img/tipu_1000x732.gif'];
+                                    scene.charUpdateSpeed = 0.01;
+                                    break;
+                                case Types.angry:
+                                    scene.char.image = game.assets['img/tipuvihanen.gif'];
+                                    scene.charUpdateSpeed = 0.01;
+                                    break;
+                                case Types.sad:
+                                    scene.char.image = game.assets['img/tipusurullinen.gif'];
+                                    scene.charUpdateSpeed = 0.01;
+                                    break;
+                            }
                             //this.char.frame = [0,1,2,3,4,5,6,9,10,11];
-                            this.char.turn(-1);
+                            scene.char.turn(-1);
                         }
                     },
                     onLeftButtonUp: function(e) {
-                        if(this.leftButtonDown) {
-                            this.leftButtonDown = false;
-                            this.char.frame = 0;
+                        var scene = game.currentScene;
+                        if(scene.leftButtonDown) {
+                            scene.leftButtonDown = false;
+                            switch(scene.char.moodMod) {
+                                case Types.happy:
+                                case Types.neutral:
+                                    scene.char.image = game.assets['img/tipu_idle_happy.png'];
+                                    scene.charUpdateSpeed = 0.1;
+                                    break;
+                                case Types.angry:
+                                    scene.char.image = game.assets['img/tipu_idle_angry.png'];
+                                    scene.charUpdateSpeed = 0.1;
+                                    break;
+                                case Types.sad:
+                                    scene.char.image = game.assets['img/tipu_idle_sad.png'];
+                                    scene.charUpdateSpeed = 0.1;
+                                    break;
+                            }
+                            //scene.char.frame = 0;
                         }
                     }
                 });
@@ -765,7 +841,7 @@ and open the template in the editor.
                         } else if(typeof image === 'object') {
                             this.image = image;
                         } else {
-                            this.image = game.assets['img/tipu_1000x732.gif'];
+                            this.image = game.assets['img/tipu_idle_happy.png'];
                             this.frame = [0,1,2,3,4,5,6,9,10,11];
                         }
                         
@@ -776,6 +852,8 @@ and open the template in the editor.
                         this.y = 140;
                         this.mood = { happy: 0, angry: 0, sad: 0 };
                         this.events = 0;
+                        
+                        this.moodMod = 'neutral';
                     },
                     turn: function(dir) {
                         if(this.direction !== dir) {
@@ -863,10 +941,14 @@ and open the template in the editor.
                     this.chatLine.rotate(gameObject.rotation - 1);
                     this.chatLine.distance = 1995;
                     this.chatLine.scaleY = 0.8;
+                    this.chatLine.parent = this;
                     this.text = new ChatLabel(text);
                     this.text.rotate(gameObject.rotation);
+                    this.text.parent = this;
                     
                     this.bubble.addEventListener(Event.TOUCH_START, this.bubble.onTouchStart);
+                    this.chatLine.addEventListener(Event.TOUCH_START, this.chatLine.onTouchStart);
+                    this.text.addEventListener(Event.TOUCH_START, this.text.onTouchStart);
                     
                     this.setText = function(text) {
                         this.text.text = text;
@@ -905,15 +987,31 @@ and open the template in the editor.
                         this.scene.removeChild(this.text);
                     };
                     
-                    this.makeLower = function(i) {
+                    this.makeOption = function(i) {
                         if(typeof i == 'undefined') {
                             i = 1;
                         }
-                        this.bubble.distance -= (100 * i);
-                        this.chatLine.scaleY -= (0.3 * i);
-                        this.chatLine.distance -= (70 * i);
-                        this.text.distance -= (100 * i);
+                        this.hide();
+                        this.bubble = new GameUIObject(957, 171, 'img/valinnat.png');
+                        this.bubble.scaleY = 0.4;
+                        this.bubble.scaleX = 0.7;
+                        this.bubble.distance = 2130;
+                        this.bubble.rotate(gameObject.rotation);
+                        this.bubble.parent = this;
+                        this.bubble.distance -= (50 * i);
                         
+                        this.chatLine = new GameUIObject(142, 196, 'img/ajatusW142.png');
+                        this.chatLine.rotate(gameObject.rotation - 1);
+                        this.chatLine.distance = 1930;
+                        this.chatLine.scaleY = 0.8;
+                        this.chatLine.parent = this;
+                        this.chatLine.scaleY = i > 0 ? 0 : this.chatLine.scaleY;
+                        this.text.distance -= (50 * i) +15;
+                        this.text.width += 100;
+                        
+                        this.bubble.addEventListener(Event.TOUCH_START, this.bubble.onTouchStart);
+                        
+                        this.show();
                         this.updatePosition(Game.instance.currentScene.world);
                     };
                 };
@@ -947,7 +1045,7 @@ and open the template in the editor.
                             optionBubble.event = this;
                             optionBubble.option = i;
                             optionBubble.show();
-                            optionBubble.makeLower(i);
+                            optionBubble.makeOption(i);
                             optionBubble.updatePosition(game.currentScene.world);
                             this.bubbles.push(optionBubble);
                         }
@@ -958,26 +1056,29 @@ and open the template in the editor.
                             var game = Game.instance;
                             var answer = this.options[index].pickAnswer();
                             var answerBubble = new ChatBubble(game.currentScene, this.gameObject, answer.text);
-                            answerBubble.show();
                             answerBubble.updatePosition(game.currentScene.world);
+                            answerBubble.show();
                             game.currentScene.ui.push(answerBubble);
                             game.currentScene.char.mood[answer.type] += answer.effect;
+                            game.currentScene.char.moodMod = answer.type;
                             
                             switch(answer.type) {
                                 case Types.happy:
-                                    game.currentScene.char.image = game.assets['img/tipu_1000x732.gif'];
+                                    game.currentScene.char.image = game.assets['img/tipu_idle_happy.png'];
+                                    game.currentScene.charUpdateSpeed = 0.2;
                                     if(game.currentScene.bgm == game.assets['audio/Happy_mood.mp3']) {
                                         game.currentScene.bgm.stop();
                                         game.currentScene.bgm = game.assets['audio/Superb_mood.mp3'];
                                         game.currentScene.bgm.play();
-                                    } else {
+                                    } else if (game.currentScene.bgm != game.assets['audio/Superb_mood.mp3']){
                                         game.currentScene.bgm.stop();
                                         game.currentScene.bgm = game.assets['audio/Happy_mood.mp3'];
                                         game.currentScene.bgm.play();
                                     }
                                     break;
                                 case Types.angry:
-                                    game.currentScene.char.image = game.assets['img/tipuvihanen.gif'];
+                                    game.currentScene.char.image = game.assets['img/tipu_idle_angry.png'];
+                                    game.currentScene.charUpdateSpeed = 0.2;
                                     if(game.currentScene.bgm != game.assets['audio/Angry_mood.mp3']) {
                                         game.currentScene.bgm.stop();
                                         game.currentScene.bgm = game.assets['audio/Angry_mood.mp3'];
@@ -985,7 +1086,8 @@ and open the template in the editor.
                                     }
                                     break;
                                 case Types.sad:
-                                    game.currentScene.char.image = game.assets['img/tipusurullinen.gif'];
+                                    game.currentScene.char.image = game.assets['img/tipu_idle_sad.png'];
+                                    game.currentScene.charUpdateSpeed = 0.2;
                                     if(game.currentScene.bgm != game.assets['audio/Rainy_mood.mp3']) {
                                         game.currentScene.bgm.stop();
                                         game.currentScene.bgm = game.assets['audio/Rainy_mood.mp3'];
@@ -1035,12 +1137,60 @@ and open the template in the editor.
                         this.width = 500;
                         this.distance = 2160;
                         this.x = gamediv.width() / 2 - this.width / 2;
+                        this.parent = null;
                     },
                     updatePosition: function(world) {
                         this.origX = world.x + world.width / 2 - this.width/2;
                         this.origY = world.y + world.height / 2 - this.height/2;
                         this.x = this.origX + this.distance * Math.sin(this.rotation * Math.PI / 180);
                         this.y = this.origY - this.distance * Math.cos(this.rotation * Math.PI / 180);
+                    },
+                    onTouchStart: function(e) {
+                        if(this.parent.option !== null && this.parent.event !== null) {
+                            this.parent.event.showAnswer(this.parent.option);
+                        } else if(this.parent.event !== null) {
+                            this.parent.event.showOptions();
+                        } else {
+                            this.parent.hide();
+                        }
+                    }
+                });
+                
+                var Button = Class.create(Sprite, {
+                    game: Game.instance,
+                    initialize: function(scene, text, startAction, endAction) {
+                        Sprite.apply(this, [957,171]);
+                        this.scene = scene;
+                        this.image = game.assets['img/valinnat.png'];
+                        this.scaleX = 0.07;
+                        this.scaleY = 0.4;
+                        this.label = new TitleLabel(text);
+                        
+                        this.label.x = this.x + this.width / 2 - 40;
+                        this.label.y = this.y + this.height / 2 - 20;
+                        
+                        this.addEventListener(Event.TOUCH_START, startAction);
+                        this.addEventListener(Event.TOUCH_END, endAction);
+                        this.label.addEventListener(Event.TOUCH_START, startAction);
+                        this.label.addEventListener(Event.TOUCH_END, endAction);
+                    },
+                    show: function() {
+                        this.scene.addChild(this);
+                        this.scene.addChild(this.label);
+                    },
+                    
+                    hide: function() {
+                        this.scene.removeChild(this);
+                        this.scene.removeChild(this.label);
+                    },
+                    setX: function(x) {
+                        this.x = x;
+                        this.label.x = this.x + this.width / 2 - 40;
+                        
+                    },
+                    setY: function(y) {
+                        this.y = y;
+                        this.label.y = this.y + this.height / 2 - 20;
                     }
                 });
                 
@@ -1049,8 +1199,8 @@ and open the template in the editor.
                     initialize: function(text) {
                         Label.apply(this, [text]);
                         //this.text = text;
-                        this.font = '32px Comic Sans MS';
-                        this.color = 'green';
+                        this.font = '24px Comic Sans MS';
+                        this.color = 'black';
                         this.backgroundColor = '#000000';
                         this.textAlign = 'center';
                         this.width = text.length * 17;
@@ -1061,7 +1211,9 @@ and open the template in the editor.
                 var Clock = Class.create(Label, {
                     game: Game.instance,
                     initialize: function() {
-                        Label.apply(this, ['00:00']);
+                        Label.apply(this, ['']);
+                        
+                        this.x = 10;
                         
                         this.hours = 8;
                         this.minutes = 0;
@@ -1076,7 +1228,7 @@ and open the template in the editor.
                         var hourText = this.hours > 9 ? this.hours : "0" + this.hours;
                         var minText = this.minutes > 9 ? this.minutes : "0" + this.minutes;
                         
-                        this.text = hourText + ":" + minText;
+                        //this.text = hourText + ":" + minText;
                     },
                     onEnterFrame: function(e) {
                         this.time += e.elapsed * 0.001;
