@@ -25,9 +25,9 @@ and open the template in the editor.
                 <li>
                     <span class="credits_title">Credits:</span>
                     <ul>
-                        <li>Coded by <span class="credit">Katariina Pohjola</span> and <span class="credit">Mikko Sairo</span></li>
-                        <li>Graphics by <span class="credit">Muura Parkkinen</span> and <span class="credit">Mira INSERTNAMEHERE</span></li>
-                        <li>Audio by <span class="credit">Tapani INSERTNAMEHERE</span> and <span class="credit">INSERTNAMEHERE INSERTNAMEHERE</span></li>
+                        <li>Coded by <span class="credit">Katariina Pohjola</span> and <span class="credit">Nukiuchi</span></li>
+                        <li>Graphics by <span class="credit">Muura</span> and <span class="credit">Myla</span></li>
+                        <li>Audio by <span class="credit">Tapani INSERT_NICK_HERE</span> and <span class="credit">INSERT_NICK_HERE</span></li>
                     </ul>
                 </li>
             </ul>
@@ -38,17 +38,24 @@ and open the template in the editor.
                 enchant();
                 
                 var game = new Game(1024,600);
-                game.preload('img/kissa.png', // NPCs
-                             'img/tipu_1000x732.gif',
+                game.preload('img/tipu_1000x732.gif', // Player Character
+                             'img/tipuvihanen.gif',
+                             'img/tipusurullinen.gif',
+                             'img/kissa.png', // NPCs
                              'img/laatikkohahmoW526.png',
                              'img/koalaW917.png',
                              'img/roskisW930.png',
                              'img/mummo-619-x-850b.gif',
                              'img/kentta_5000.gif', // UI and other objects
-                             'img/title.gif',
                              'img/viivaW176.png',
                              'img/ajatusW142.png',
-                             'img/kuplaW958.png');
+                             'img/kuplaW958.png',
+                             'img/title.gif', // Fullscreen images
+                             /*'img/credits.gif',*/
+                             'img/happydream.gif',
+                             'img/saddream.gif'
+                             /*'img/angrydream.gif',
+                             'img/neutraldream.gif'*/);
                 game.onload = function() {
                     game.scale = 1;
                     game.fps = 25;
@@ -92,22 +99,26 @@ and open the template in the editor.
                         */
                         this.title = new Sprite(1024,600);
                         this.title.image = game.assets['img/title.gif'];
-                        this.title.frame = [0,1,2];
                         this.addChild(this.title);
                         
                         this.addEventListener(Event.TOUCH_START, this.onTouchStart);
                         this.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
+                        
+                        this.titleTime = 0;
                     },
 
                     onTouchStart: function(e) {
                         var gameScene = new GameScene();
-                        game.scenes.game = gameScene;
-                    
-                        game.replaceScene(game.scenes.game);
+                        game.replaceScene(gameScene);
                     },
                     onEnterFrame: function(e) {
                         //this.char.onEnterFrame(e);
                         //this.world.rotate(-0.1);
+                        this.titleTime += e.elapsed * 0.001;
+                        if(this.titleTime >= 0.15) {
+                            this.title.frame++;
+                            this.titleTime = 0;
+                        }
                     }
                 });
                 
@@ -130,20 +141,20 @@ and open the template in the editor.
                         cat.rotate(15);
                         
                         var catEvent = new GameEvent();
-                        catEvent.initialText = "Hello world!";
-                        var option1 = new Option("What a nice day!");
-                        var o1_answer1 = new Answer("Go away.", Types.sad, 2);
-                        var o1_answer2 = new Answer("Indeed it is!", Types.happy, 2);
+                        catEvent.initialText = "Purrrrrrr.";
+                        var option1 = new Option("Oh, please do not eat me...");
+                        var o1_answer1 = new Answer("I am quite full, thank you very much.", Types.happy, 1);
+                        var o1_answer2 = new Answer("You are not enough even for a snack.", Types.sad, 1);
                         option1.answers.push(o1_answer1);
                         option1.answers.push(o1_answer2);
-                        var option2 = new Option("Go away.");
-                        var o2_answer1 = new Answer("Same to you.", Types.angry, 2);
-                        var o2_answer2 = new Answer("Fine.", Types.angry, 2);
+                        var option2 = new Option("Ah, cats are so beautiful!");
+                        var o2_answer1 = new Answer("I know. Sucks that you will never be as         beautiful as I am, huh?", Types.sad, 2);
+                        var o2_answer2 = new Answer("Purrrr, and your wish was to pet me, yes?", Types.happy, 2);
                         option2.answers.push(o2_answer1);
                         option2.answers.push(o2_answer2);
-                        var option3 = new Option("What a nice day!");
-                        var o3_answer1 = new Answer("Go away.", Types.sad, 2);
-                        var o3_answer2 = new Answer("Indeed it is!", Types.happy, 2);
+                        var option3 = new Option("Why did the chicken cross the road?");
+                        var o3_answer1 = new Answer("To get out of my sight, smelling like a hay-     stack in a ditch...", Types.angry, 1);
+                        var o3_answer2 = new Answer("Better question is, why did you not?", Types.angry, 2);
                         option3.answers.push(o3_answer1);
                         option3.answers.push(o3_answer2);
                         catEvent.options.push(option1);
@@ -155,43 +166,180 @@ and open the template in the editor.
                         this.npcs.push(cat);
                         
                         var coala = new GameObject(917,1084, 'img/koalaW917.png');
-                        coala.distance = 1800;
+                        coala.distance = 1827;
                         coala.rotate(cat.rotation + 45);
+                        
+                        var coalaEvent = new GameEvent();
+                        coalaEvent.initialText = "Cheers matey!";
+                        var option1 = new Option("Hey, how's it going down in Australia?");
+                        var o1_answer1 = new Answer("I dunno man, never been. Captive all my life.", Types.sad, 2);
+                        var o1_answer2 = new Answer("I dunno man, never been. Go see for yerself if yer that interested.", Types.angry, 2);
+                        option1.answers.push(o1_answer1);
+                        option1.answers.push(o1_answer2);
+                        var option2 = new Option("You're so cute!");
+                        var o2_answer1 = new Answer("I know man, I know.", Types.happy, 1);
+                        var o2_answer2 = new Answer("Ye think? Can't say the same from you,          though.", Types.angry, 2);
+                        option2.answers.push(o2_answer1);
+                        option2.answers.push(o2_answer2);
+                        var option3 = new Option("Heh. Dropbears.");
+                        var o3_answer1 = new Answer("Ha. Ha. So very funny. Not.", Types.angry, 2);
+                        var o3_answer2 = new Answer("Ye think that's funny man, but my pa got      killed in a dropbear accident.", Types.sad, 2);
+                        option3.answers.push(o3_answer1);
+                        option3.answers.push(o3_answer2);
+                        coalaEvent.options.push(option1);
+                        coalaEvent.options.push(option2);
+                        coalaEvent.options.push(option3);
+                        
+                        coala.event = coalaEvent;
                         this.addChild(coala);
                         this.npcs.push(coala);
                         
                         var boxguy = new GameObject(526, 1373, 'img/laatikkohahmoW526.png');
-                        boxguy.distance = 1800;
+                        boxguy.distance = 1820;
                         boxguy.rotate(coala.rotation + 50);
+                        
+                        var boxEvent = new GameEvent();
+                        boxEvent.initialText = "Grrrr.";
+                        var option1 = new Option("Hey chunkface!");
+                        var o1_answer1 = new Answer("Ha! That's a good one!", Types.happy, 2);
+                        var o1_answer2 = new Answer("Watch it, it ain't easy like this!", Types.angry, 1);
+                        option1.answers.push(o1_answer1);
+                        option1.answers.push(o1_answer2);
+                        var option2 = new Option("Can I help you?");
+                        var o2_answer1 = new Answer("Oh, you think you're SO HELPFUL now, do   you? Well la dee dah! Goody two shoes on theloose!", Types.angry, 2);
+                        var o2_answer2 = new Answer("Oh you're one of those. Wanna help every-   one. Getting the good karma! Make everyone happy! Ain't you one bloody goody two            shoes...", Types.angry, 2);
+                        option2.answers.push(o2_answer1);
+                        option2.answers.push(o2_answer2);
+                        var option3 = new Option("How come you're shaped like a box?");
+                        var o3_answer1 = new Answer("I was born like this. Hard to fit in 'round     places. It's inside what counts, though.", Types.happy, 1);
+                        var o3_answer2 = new Answer("I was born like this. Makes the life hard, no round place I could fit through.", Types.sad, 2);
+                        option3.answers.push(o3_answer1);
+                        option3.answers.push(o3_answer2);
+                        boxEvent.options.push(option1);
+                        boxEvent.options.push(option2);
+                        boxEvent.options.push(option3);
+                        
+                        boxguy.event = boxEvent;
                         this.addChild(boxguy);
                         this.npcs.push(boxguy);
                         
                         var trashbin = new GameObject(930, 1272, 'img/roskisW930.png');
                         trashbin.distance = 1808;
                         trashbin.rotate(boxguy.rotation + 50);
+                        
+                        var trashEvent = new GameEvent();
+                        trashEvent.initialText = "...";
+                        var option1 = new Option("<Kick it.>");
+                        var o1_answer1 = new Answer("Ow! What'd you do that for, you bloody        idiot?!", Types.angry, 2);
+                        var o1_answer2 = new Answer("Ahh, that hit the itch. Thanks dude!", Types.happy, 2);
+                        option1.answers.push(o1_answer1);
+                        option1.answers.push(o1_answer2);
+                        var option2 = new Option("I'm so hungry... I wonder if there's anything there.");
+                        var o2_answer1 = new Answer("Lots of yummy stuff in here. Old diapers      smell just delicious!", Types.sad, 1);
+                        var o2_answer2 = new Answer("Like this hambuger that was dumped here     like couple minutes ago? Sorry, but my          lodgers already ate bites out of it.", Types.sad, 1);
+                        option2.answers.push(o2_answer1);
+                        option2.answers.push(o2_answer2);
+                        var option3 = new Option("Oh, I should leave my candy wrappings here.");
+                        var o3_answer1 = new Answer("Ooh, they smell delicious! Wait, is that what I think it is? Oh, it sure is, my favorite kind of candy crumbs!", Types.happy, 2);
+                        var o3_answer2 = new Answer("I'm sorry, but I'm only for recycling bottles.Take your wrappings elsewhere.", Types.angry, 1);
+                        option3.answers.push(o3_answer1);
+                        option3.answers.push(o3_answer2);
+                        trashEvent.options.push(option1);
+                        trashEvent.options.push(option2);
+                        trashEvent.options.push(option3);
+                        
+                        trashbin.event = trashEvent;
                         this.addChild(trashbin);
                         this.npcs.push(trashbin);
                         
                         var granny = new GameObject(619, 850, 'img/mummo-619-x-850b.gif');
-                        granny.distance = 1830;
-                        granny.scaleX = 0.2;
-                        granny.scaleY = 0.2;
+                        granny.distance = 1820;
+                        granny.scaleX = 0.25;
+                        granny.scaleY = 0.25;
                         granny.rotate(trashbin.rotation + 50);
+                        
+                        var grannyEvent = new GameEvent();
+                        grannyEvent.initialText = "Hello there, youngin'!";
+                        var option1 = new Option("Hello there, grandma. Need help crossing        the street?");
+                        var o1_answer1 = new Answer("Well I never! I still got spring in these         bones! I can cross a road or few just fine!", Types.angry, 2);
+                        var o1_answer2 = new Answer("How dare you call me grandma, I still remem-ber my days as teenager like it was only        yesterday!", Types.angry, 1);
+                        option1.answers.push(o1_answer1);
+                        option1.answers.push(o1_answer2);
+                        var option2 = new Option("Such a terrible weather.");
+                        var o2_answer1 = new Answer("It sure is. Days like these, I'm glad I have    my vodka to keep my old achin' bones warm!", Types.happy, 2);
+                        var o2_answer2 = new Answer("And thanks to whiny people like you it          doesn't get any better, either.", Types.angry, 2);
+                        option2.answers.push(o2_answer1);
+                        option2.answers.push(o2_answer2);
+                        var option3 = new Option("What's on your mind?");
+                        var o3_answer1 = new Answer("My dead wife, Pirkko... Oh Pirkko, you used to make me laugh so.", Types.sad, 2);
+                        var o3_answer2 = new Answer("Life is so dark nowadays, without my trust- worthy dog Vuppe...", Types.sad, 2);
+                        option3.answers.push(o3_answer1);
+                        option3.answers.push(o3_answer2);
+                        grannyEvent.options.push(option1);
+                        grannyEvent.options.push(option2);
+                        grannyEvent.options.push(option3);
+                        
+                        granny.event = grannyEvent;
                         this.addChild(granny);
                         this.npcs.push(granny);
                         
                         var cat = new GameObject(765,1984, 'img/kissa.png');
                         cat.distance = 1760;
-                        cat.rotate(15);
+                        cat.rotate(granny.rotation + 50);
+                        
+                        var catEvent = new GameEvent();
+                        catEvent.initialText = "Purrrrrrr.";
+                        var option1 = new Option("Oh, please do not eat me...");
+                        var o1_answer1 = new Answer("I am quite full, thank you very much.", Types.happy, 1);
+                        var o1_answer2 = new Answer("You are not enough even for a snack.", Types.sad, 1);
+                        option1.answers.push(o1_answer1);
+                        option1.answers.push(o1_answer2);
+                        var option2 = new Option("Ah, cats are so beautiful!");
+                        var o2_answer1 = new Answer("I know. Sucks that you will never be as         beautiful as I am, huh?", Types.sad, 2);
+                        var o2_answer2 = new Answer("Purrrr, and your wish was to pet me, yes?", Types.happy, 2);
+                        option2.answers.push(o2_answer1);
+                        option2.answers.push(o2_answer2);
+                        var option3 = new Option("Why did the chicken cross the road?");
+                        var o3_answer1 = new Answer("To get out of my sight, smelling like a hay-     stack in a ditch...", Types.angry, 1);
+                        var o3_answer2 = new Answer("Better question is, why did you not?", Types.angry, 2);
+                        option3.answers.push(o3_answer1);
+                        option3.answers.push(o3_answer2);
+                        catEvent.options.push(option1);
+                        catEvent.options.push(option2);
+                        catEvent.options.push(option3);
+                        
+                        cat.event = catEvent;
                         this.addChild(cat);
                         this.npcs.push(cat);
                         
                         trashbin = new GameObject(930, 1272, 'img/roskisW930.png');
                         trashbin.distance = 1808;
-                        trashbin.rotate(granny.rotation + 50);
+                        trashbin.rotate(cat.rotation + 50);
+                        
+                        var trashEvent = new GameEvent();
+                        trashEvent.initialText = "...";
+                        var option1 = new Option("<Kick it.>");
+                        var o1_answer1 = new Answer("Ow! What'd you do that for, you bloody        idiot?!", Types.angry, 2);
+                        var o1_answer2 = new Answer("Ahh, that hit the itch. Thanks dude!", Types.happy, 2);
+                        option1.answers.push(o1_answer1);
+                        option1.answers.push(o1_answer2);
+                        var option2 = new Option("I'm so hungry... I wonder if there's anything there.");
+                        var o2_answer1 = new Answer("Lots of yummy stuff in here. Old diapers      smell just delicious!", Types.sad, 1);
+                        var o2_answer2 = new Answer("Like this hambuger that was dumped here     like couple minutes ago? Sorry, but my          lodgers already ate bites out of it.", Types.sad, 1);
+                        option2.answers.push(o2_answer1);
+                        option2.answers.push(o2_answer2);
+                        var option3 = new Option("Oh, I should leave my candy wrappings here.");
+                        var o3_answer1 = new Answer("Ooh, they smell delicious! Wait, is that what I think it is? Oh, it sure is, my favorite kind of candy crumbs!", Types.happy, 2);
+                        var o3_answer2 = new Answer("I'm sorry, but I'm only for recycling bottles.Take your wrappings elsewhere.", Types.angry, 1);
+                        option3.answers.push(o3_answer1);
+                        option3.answers.push(o3_answer2);
+                        trashEvent.options.push(option1);
+                        trashEvent.options.push(option2);
+                        trashEvent.options.push(option3);
+                        
+                        trashbin.event = trashEvent;
                         this.addChild(trashbin);
                         this.npcs.push(trashbin);
-                        
                         
                         // Define the Player Character
                         this.char = new Character(781,602);
@@ -207,7 +355,7 @@ and open the template in the editor.
                         
                         this.ui = new Array();
                         
-                        this.charChat = new ChatBubble(this, this.char, "Hello world! This is going to be a long-ish     text. Let's make it even longer just to make  it longer.");
+                        this.charChat = new ChatBubble(this, this.char, "What a nice morning! Let's go for a walk.       Click these bubbles to progress a discussion!");
                         this.charChat.show();
                         this.charChat.updatePosition(this.world);
                         
@@ -224,12 +372,14 @@ and open the template in the editor.
                         this.leftButtonDown = false;
                         this.timeElapsedObjects = 0;
                         this.timeElapsedChar = 0;
+                        this.timeElapsedEnd = 0;
                         
                         // Variables for game speed and such
                         this.charUpdateSpeed = 0.01;
                         this.objectUpdateSpeed = 0.1;
                         this.worldRotationSpeed = 0.15;
-                        this.collisionDistance = 100;
+                        this.collisionDistance = 150;
+                        this.endSpeed = 10;
                         
                         // Initialize objects
                         this.rotateObjects(0);
@@ -337,6 +487,13 @@ and open the template in the editor.
                         if(npc !== null) {
                             npc.startEvent();
                         }
+                        if(this.char.events >= 7) {
+                            this.timeElapsedEnd += e.elapsed * 0.001;
+                            if(this.timeElapsedEnd >= this.endSpeed) {
+                                var endScene = new EndScene(this.char.mood);
+                                this.game.replaceScene(endScene);
+                            }
+                        }
                     },
                     onRightButtonDown: function(e) {
                         if(!this.rightButtonDown) {
@@ -363,6 +520,69 @@ and open the template in the editor.
                             this.leftButtonDown = false;
                             this.char.frame = 0;
                         }
+                    }
+                });
+                
+                var EndScene = Class.create(Scene, {
+                    game: Game.instance,
+                    initialize: function(mood) {
+                        Scene.apply(this);
+                        this.dream = new Sprite(1024,600);
+                        
+                        if(mood.happy > mood.angry && mood.happy > mood.sad) {
+                            this.dream.image = game.assets['img/happydream.gif'];
+                        } else if(mood.angry > mood.happy && mood.angry > mood.sad) {
+                            this.dream.image = game.assets['img/happydream.gif'];
+                        } else if(mood.sad > mood.angry && mood.sad > mood.happy) {
+                            this.dream.image = game.assets['img/saddream.gif'];
+                        } else {
+                            this.dream.image = game.assets['img/happydream.gif'];
+                        }
+                        
+                        this.addChild(this.dream);
+                        
+                        this.addEventListener(Event.ENTER_FRAME, this.onFrameEntered);
+                        this.addEventListener(Event.TOUCH_START, this.onTouchStart);
+                        
+                        this.timeElapsed = 0;
+                    },
+                    onFrameEntered: function(e) {
+                        this.timeElapsed += e.elapsed * 0.001;
+                        if(this.timeElapsed >= 0.15) {
+                            this.dream.frame++;
+                            this.timeElapsed = 0;
+                        }
+                    },
+                    onTouchStart: function(e) {
+                        var creditsScene = new CreditsScene();
+                        this.game.replaceScene(creditsScene);
+                    }
+                });
+                var CreditsScene = Class.create(Scene, {
+                    game: Game.instance,
+                    initialize: function() {
+                        Scene.apply(this);
+                        this.credits = new Sprite(1024,600);
+                        
+                        this.credits.image = game.assets['img/saddream.gif'];
+                        
+                        this.addChild(this.credits);
+                        
+                        this.addEventListener(Event.ENTER_FRAME, this.onFrameEntered);
+                        this.addEventListener(Event.TOUCH_START, this.onTouchStart);
+                        
+                        this.timeElapsed = 0;
+                    },
+                    onFrameEntered: function(e) {
+                        this.timeElapsed += e.elapsed * 0.001;
+                        if(this.timeElapsed >= 0.15) {
+                            this.credits.frame++;
+                            this.timeElapsed = 0;
+                        }
+                    },
+                    onTouchStart: function(e) {
+                        var startScene = new StartScene();
+                        this.game.replaceScene(startScene);
                     }
                 });
                 
@@ -396,12 +616,13 @@ and open the template in the editor.
                             this.frame = [0,1,2,3,4,5,6,9,10,11];
                         }
                         
-                        this.scaleX = 0.25;
-                        this.scaleY = 0.25;
+                        this.scaleX = 0.15;
+                        this.scaleY = 0.15;
                         this.direction = 1;
                         this.x = gamediv.width() / 2 - this.width / 2;
-                        this.y = 100;
+                        this.y = 140;
                         this.mood = { happy: 0, angry: 0, sad: 0 };
+                        this.events = 0;
                     },
                     turn: function(dir) {
                         if(this.direction !== dir) {
@@ -424,8 +645,8 @@ and open the template in the editor.
                             this.image = image;
                         }
                         this.x = gamediv.width() / 2 - this.width / 2;
-                        this.scaleX = 0.1;
-                        this.scaleY = 0.1;
+                        this.scaleX = 0.15;
+                        this.scaleY = 0.15;
                         this.distance = 1750;
                         this.event = null;
                     },
@@ -438,6 +659,7 @@ and open the template in the editor.
                     startEvent: function() {
                         if(this.event !== null && !this.event.started) {
                             this.event.showEvent(this);
+                            this.game.currentScene.char.events++;
                         }
                     }
                 });
@@ -486,8 +708,8 @@ and open the template in the editor.
                     this.bubble.parent = this;
                     this.chatLine = new GameUIObject(176, 280, 'img/viivaW176.png');
                     this.chatLine.rotate(gameObject.rotation - 1);
-                    this.chatLine.distance = 1990;
-                    this.chatLine.scaleY = 0.85;
+                    this.chatLine.distance = 1995;
+                    this.chatLine.scaleY = 0.8;
                     this.text = new ChatLabel(text);
                     this.text.rotate(gameObject.rotation);
                     
@@ -535,8 +757,8 @@ and open the template in the editor.
                             i = 1;
                         }
                         this.bubble.distance -= (100 * i);
-                        this.chatLine.scaleY -= (0.4 * i);
-                        this.chatLine.distance -= (60 * i);
+                        this.chatLine.scaleY -= (0.3 * i);
+                        this.chatLine.distance -= (70 * i);
                         this.text.distance -= (100 * i);
                         
                         this.updatePosition(Game.instance.currentScene.world);
@@ -587,6 +809,18 @@ and open the template in the editor.
                             answerBubble.updatePosition(game.currentScene.world);
                             game.currentScene.ui.push(answerBubble);
                             game.currentScene.char.mood[answer.type] += answer.effect;
+                            
+                            switch(answer.type) {
+                                case Types.happy:
+                                    game.currentScene.char.image = game.assets['img/tipu_1000x732.gif'];
+                                    break;
+                                case Types.angry:
+                                    game.currentScene.char.image = game.assets['img/tipuvihanen.gif'];
+                                    break;
+                                case Types.sad:
+                                    game.currentScene.char.image = game.assets['img/tipusurullinen.gif'];
+                                    break;
+                            }
                             
                             console.log(game.currentScene.char.mood);
                         }
@@ -679,7 +913,7 @@ and open the template in the editor.
                             if(this.minutes === 0) {
                                 this.hours = (this.hours + 1) % 24;
                             }
-                            this.time -= this.timeSpeed;
+                            this.time = 0;
                             this.updateClock();
                         }
                     }
