@@ -38,23 +38,23 @@ and open the template in the editor.
                 enchant();
                 
                 var game = new Game(1024,600);
-                game.preload('img/tipu_1000x732.gif', // Player Character
-                             'img/tipu_idle_happy.png',
-                             'img/tipuvihanen.gif',
-                             'img/tipu_idle_angry.png',
-                             'img/tipusurullinen.gif',
-                             'img/tipu_idle_sad.png',
-                             'img/kissa.png', // NPCs
-                             'img/laatikkohahmoW526.png',
-                             'img/koalaW917.png',
-                             'img/roskisW930.png',
-                             'img/mummo-619-x-850b.gif',
+                game.preload('img/pienet/tipu_1000x732.gif', // Player Character
+                             'img/pienet/tipu_idle_happy.png',
+                             'img/pienet/tipuvihanen.gif',
+                             'img/pienet/tipu_idle_angry.png',
+                             'img/pienet/tipusurullinen.gif',
+                             'img/pienet/tipu_idle_sad.png',
+                             'img/pienet/kissa.png', // NPCs
+                             'img/pienet/laatikkohahmoW526.png',
+                             'img/pienet/koalaW917.png',
+                             'img/pienet/roskisW930.png',
+                             'img/pienet/mummo-619-x-850b.gif',
                              'img/tipuntalo.png',
                              'img/kentta_5000.gif', // UI and other objects
-                             'img/viivaW176.png',
-                             'img/ajatusW142.png',
-                             'img/kuplaW958.png',
-                             'img/valinnat.png',
+                             'img/pienet/viivaW176.png',
+                             'img/pienet/ajatusW142.png',
+                             'img/pienet/kuplaW958.png',
+                             'img/pienet/valinnat.png',
                              'img/title.gif', // Fullscreen images
                              'img/credits.gif',
                              'img/happydream.gif',
@@ -145,7 +145,7 @@ and open the template in the editor.
                         // Define different GameObjects, or NPCs
                         this.npcs = new Array();
                         
-                        var cat = new GameObject(765,1984, 'img/kissa.png');
+                        var cat = new GameObject(115,298, 'img/pienet/kissa.png');
                         cat.distance = 1760;
                         cat.rotate(15);
                         
@@ -174,7 +174,7 @@ and open the template in the editor.
                         this.addChild(cat);
                         this.npcs.push(cat);
                         
-                        var coala = new GameObject(917,1084, 'img/koalaW917.png');
+                        var coala = new GameObject(137,163, 'img/pienet/koalaW917.png');
                         coala.distance = 1827;
                         coala.rotate(cat.rotation + 45);
                         
@@ -203,7 +203,7 @@ and open the template in the editor.
                         this.addChild(coala);
                         this.npcs.push(coala);
                         
-                        var boxguy = new GameObject(526, 1373, 'img/laatikkohahmoW526.png');
+                        var boxguy = new GameObject(79, 206, 'img/pienet/laatikkohahmoW526.png');
                         boxguy.distance = 1820;
                         boxguy.rotate(coala.rotation + 50);
                         
@@ -232,7 +232,7 @@ and open the template in the editor.
                         this.addChild(boxguy);
                         this.npcs.push(boxguy);
                         
-                        var trashbin = new GameObject(930, 1272, 'img/roskisW930.png');
+                        var trashbin = new GameObject(139, 191, 'img/pienet/roskisW930.png');
                         trashbin.distance = 1808;
                         trashbin.rotate(boxguy.rotation + 50);
                         
@@ -261,10 +261,10 @@ and open the template in the editor.
                         this.addChild(trashbin);
                         this.npcs.push(trashbin);
                         
-                        var granny = new GameObject(619, 850, 'img/mummo-619-x-850b.gif');
+                        var granny = new GameObject(155, 213, 'img/pienet/mummo-619-x-850b.gif');
                         granny.distance = 1820;
-                        granny.scaleX = 0.25;
-                        granny.scaleY = 0.25;
+                        //granny.scaleX = 0.25;
+                        //granny.scaleY = 0.25;
                         granny.rotate(trashbin.rotation + 50);
                         
                         var grannyEvent = new GameEvent();
@@ -292,7 +292,7 @@ and open the template in the editor.
                         this.addChild(granny);
                         this.npcs.push(granny);
                         
-                        var cat = new GameObject(765,1984, 'img/kissa.png');
+                        var cat = new GameObject(115,298, 'img/pienet/kissa.png');
                         cat.distance = 1760;
                         cat.rotate(granny.rotation + 50);
                         
@@ -321,7 +321,7 @@ and open the template in the editor.
                         this.addChild(cat);
                         this.npcs.push(cat);
                         
-                        trashbin = new GameObject(930, 1272, 'img/roskisW930.png');
+                        trashbin = new GameObject(139, 191, 'img/pienet/roskisW930.png');
                         trashbin.distance = 1808;
                         trashbin.rotate(cat.rotation + 50);
                         
@@ -361,7 +361,7 @@ and open the template in the editor.
                         this.npcs.push(this.end);
                         
                         // Define the Player Character
-                        this.char = new Character(781,602);
+                        this.char = new Character(117,90);
                         this.char.frame = [null];
                         this.addChild(this.char);
                         
@@ -379,12 +379,12 @@ and open the template in the editor.
                         this.charChat.updatePosition(this.world);
                         
                         this.rightButton = new Button(this, ' - ->', this.onRightButtonDown, this.onRightButtonUp);
-                        this.rightButton.setX(70);
-                        this.rightButton.setY(480);
+                        this.rightButton.setX(210);
+                        this.rightButton.setY(520);
                         this.rightButton.show();
                         this.leftButton = new Button(this, '<- -', this.onLeftButtonDown, this.onLeftButtonUp);
-                        this.leftButton.setX(-10);
-                        this.leftButton.setY(480);
+                        this.leftButton.setX(130);
+                        this.leftButton.setY(520);
                         this.leftButton.show();
                         
                         // Event bindings
@@ -638,15 +638,15 @@ and open the template in the editor.
                                 switch(this.char.moodMod) {
                                     case Types.happy:
                                     case Types.neutral:
-                                        this.char.image = game.assets['img/tipu_idle_happy.png'];
+                                        this.char.image = game.assets['img/pienet/tipu_idle_happy.png'];
                                         this.charUpdateSpeed = 0.2;
                                         break;
                                     case Types.angry:
-                                        this.char.image = game.assets['img/tipu_idle_angry.png'];
+                                        this.char.image = game.assets['img/pienet/tipu_idle_angry.png'];
                                         this.charUpdateSpeed = 0.2;
                                         break;
                                     case Types.sad:
-                                        this.char.image = game.assets['img/tipu_idle_sad.png'];
+                                        this.char.image = game.assets['img/pienet/tipu_idle_sad.png'];
                                         this.charUpdateSpeed = 0.2;
                                         break;
                                 }
@@ -682,15 +682,15 @@ and open the template in the editor.
                             switch(scene.char.moodMod) {
                                 case Types.happy:
                                 case Types.neutral:
-                                    scene.char.image = game.assets['img/tipu_1000x732.gif'];
+                                    scene.char.image = game.assets['img/pienet/tipu_1000x732.gif'];
                                     scene.charUpdateSpeed = 0.01;
                                     break;
                                 case Types.angry:
-                                    scene.char.image = game.assets['img/tipuvihanen.gif'];
+                                    scene.char.image = game.assets['img/pienet/tipuvihanen.gif'];
                                     scene.charUpdateSpeed = 0.01;
                                     break;
                                 case Types.sad:
-                                    scene.char.image = game.assets['img/tipusurullinen.gif'];
+                                    scene.char.image = game.assets['img/pienet/tipusurullinen.gif'];
                                     scene.charUpdateSpeed = 0.01;
                                     break;
                             }
@@ -704,15 +704,15 @@ and open the template in the editor.
                             switch(scene.char.moodMod) {
                                 case Types.happy:
                                 case Types.neutral:
-                                    scene.char.image = game.assets['img/tipu_idle_happy.png'];
+                                    scene.char.image = game.assets['img/pienet/tipu_idle_happy.png'];
                                     scene.charUpdateSpeed = 0.2;
                                     break;
                                 case Types.angry:
-                                    scene.char.image = game.assets['img/tipu_idle_angry.png'];
+                                    scene.char.image = game.assets['img/pienet/tipu_idle_angry.png'];
                                     scene.charUpdateSpeed = 0.2;
                                     break;
                                 case Types.sad:
-                                    scene.char.image = game.assets['img/tipu_idle_sad.png'];
+                                    scene.char.image = game.assets['img/pienet/tipu_idle_sad.png'];
                                     scene.charUpdateSpeed = 0.2;
                                     break;
                             }
@@ -726,15 +726,15 @@ and open the template in the editor.
                             switch(scene.char.moodMod) {
                                 case Types.happy:
                                 case Types.neutral:
-                                    scene.char.image = game.assets['img/tipu_1000x732.gif'];
+                                    scene.char.image = game.assets['img/pienet/tipu_1000x732.gif'];
                                     scene.charUpdateSpeed = 0.01;
                                     break;
                                 case Types.angry:
-                                    scene.char.image = game.assets['img/tipuvihanen.gif'];
+                                    scene.char.image = game.assets['img/pienet/tipuvihanen.gif'];
                                     scene.charUpdateSpeed = 0.01;
                                     break;
                                 case Types.sad:
-                                    scene.char.image = game.assets['img/tipusurullinen.gif'];
+                                    scene.char.image = game.assets['img/pienet/tipusurullinen.gif'];
                                     scene.charUpdateSpeed = 0.01;
                                     break;
                             }
@@ -749,15 +749,15 @@ and open the template in the editor.
                             switch(scene.char.moodMod) {
                                 case Types.happy:
                                 case Types.neutral:
-                                    scene.char.image = game.assets['img/tipu_idle_happy.png'];
+                                    scene.char.image = game.assets['img/pienet/tipu_idle_happy.png'];
                                     scene.charUpdateSpeed = 0.1;
                                     break;
                                 case Types.angry:
-                                    scene.char.image = game.assets['img/tipu_idle_angry.png'];
+                                    scene.char.image = game.assets['img/pienet/tipu_idle_angry.png'];
                                     scene.charUpdateSpeed = 0.1;
                                     break;
                                 case Types.sad:
-                                    scene.char.image = game.assets['img/tipu_idle_sad.png'];
+                                    scene.char.image = game.assets['img/pienet/tipu_idle_sad.png'];
                                     scene.charUpdateSpeed = 0.1;
                                     break;
                             }
@@ -886,15 +886,15 @@ and open the template in the editor.
                         } else if(typeof image === 'object') {
                             this.image = image;
                         } else {
-                            this.image = game.assets['img/tipu_idle_happy.png'];
+                            this.image = game.assets['img/pienet/tipu_idle_happy.png'];
                             this.frame = [0,1,2,3,4,5,6,9,10,11];
                         }
                         
-                        this.scaleX = 0.15;
-                        this.scaleY = 0.15;
+                        //this.scaleX = 0.15;
+                        //this.scaleY = 0.15;
                         this.direction = 1;
                         this.x = gamediv.width() / 2 - this.width / 2;
-                        this.y = 140;
+                        this.y = 400;
                         this.mood = { happy: 0, angry: 0, sad: 0 };
                         this.events = 0;
                         
@@ -921,8 +921,8 @@ and open the template in the editor.
                             this.image = image;
                         }
                         this.x = gamediv.width() / 2 - this.width / 2;
-                        this.scaleX = 0.15;
-                        this.scaleY = 0.15;
+                        //this.scaleX = 0.15;
+                        //this.scaleY = 0.15;
                         this.distance = 1750;
                         this.event = null;
                     },
@@ -949,8 +949,8 @@ and open the template in the editor.
                             this.image = image;
                         }
                         this.x = gamediv.width() / 2 - this.width / 2;
-                        this.scaleX = 0.5;
-                        this.scaleY = 0.5;
+                        //this.scaleX = 0.5;
+                        //this.scaleY = 0.5;
                         this.distance = 2075;
                     },
                     updatePosition: function(world) {
@@ -976,16 +976,17 @@ and open the template in the editor.
                     this.option = null;
                     this.event = null;
                     
-                    this.bubble = new GameUIObject(958, 465, 'img/kuplaW958.png');
-                    this.bubble.scaleY = 0.3;
-                    this.bubble.scaleX = 0.6;
+                    this.bubble = new GameUIObject(575, 140, 'img/pienet/kuplaW958.png');
                     this.bubble.distance = 2130;
+                    //this.bubble.scaleY = 0.3;
+                    //this.bubble.scaleX = 0.6;
+                    //this.bubble.distance = 2130;
                     this.bubble.rotate(gameObject.rotation);
                     this.bubble.parent = this;
-                    this.chatLine = new GameUIObject(176, 280, 'img/viivaW176.png');
+                    this.chatLine = new GameUIObject(88, 168, 'img/pienet/viivaW176.png');
                     this.chatLine.rotate(gameObject.rotation - 1);
                     this.chatLine.distance = 2013;
-                    this.chatLine.scaleY = 0.6;
+                    //this.chatLine.scaleY = 0.6;
                     this.chatLine.parent = this;
                     this.text = new ChatLabel(text);
                     this.text.rotate(gameObject.rotation);
@@ -1037,18 +1038,18 @@ and open the template in the editor.
                             i = 1;
                         }
                         this.hide();
-                        this.bubble = new GameUIObject(957, 171, 'img/valinnat.png');
-                        this.bubble.scaleY = 0.4;
-                        this.bubble.scaleX = 0.7;
+                        this.bubble = new GameUIObject(670, 68, 'img/pienet/valinnat.png');
+                        //this.bubble.scaleY = 0.4;
+                        //this.bubble.scaleX = 0.7;
                         this.bubble.distance = 2130;
                         this.bubble.rotate(gameObject.rotation);
                         this.bubble.parent = this;
                         this.bubble.distance -= (50 * i);
                         
-                        this.chatLine = new GameUIObject(142, 196, 'img/ajatusW142.png');
+                        this.chatLine = new GameUIObject(71, 157, 'img/pienet/ajatusW142.png');
                         this.chatLine.rotate(gameObject.rotation - 1);
                         this.chatLine.distance = 1930;
-                        this.chatLine.scaleY = 0.8;
+                        //this.chatLine.scaleY = 0.8;
                         this.chatLine.parent = this;
                         this.chatLine.scaleY = i > 0 ? 0 : this.chatLine.scaleY;
                         this.text.distance -= (50 * i) +15;
@@ -1109,7 +1110,7 @@ and open the template in the editor.
                             
                             switch(answer.type) {
                                 case Types.happy:
-                                    game.currentScene.char.image = game.assets['img/tipu_idle_happy.png'];
+                                    game.currentScene.char.image = game.assets['img/pienet/tipu_idle_happy.png'];
                                     game.currentScene.charUpdateSpeed = 0.2;
                                     if(game.currentScene.bgm == game.assets['audio/Happy_mood.mp3']) {
                                         game.currentScene.bgm.stop();
@@ -1122,7 +1123,7 @@ and open the template in the editor.
                                     }
                                     break;
                                 case Types.angry:
-                                    game.currentScene.char.image = game.assets['img/tipu_idle_angry.png'];
+                                    game.currentScene.char.image = game.assets['img/pienet/tipu_idle_angry.png'];
                                     game.currentScene.charUpdateSpeed = 0.2;
                                     if(game.currentScene.bgm != game.assets['audio/Angry_mood.mp3']) {
                                         game.currentScene.bgm.stop();
@@ -1131,7 +1132,7 @@ and open the template in the editor.
                                     }
                                     break;
                                 case Types.sad:
-                                    game.currentScene.char.image = game.assets['img/tipu_idle_sad.png'];
+                                    game.currentScene.char.image = game.assets['img/pienet/tipu_idle_sad.png'];
                                     game.currentScene.charUpdateSpeed = 0.2;
                                     if(game.currentScene.bgm != game.assets['audio/Rainy_mood.mp3']) {
                                         game.currentScene.bgm.stop();
@@ -1204,11 +1205,11 @@ and open the template in the editor.
                 var Button = Class.create(Sprite, {
                     game: Game.instance,
                     initialize: function(scene, text, startAction, endAction) {
-                        Sprite.apply(this, [957,171]);
+                        Sprite.apply(this, [670,68]);
                         this.scene = scene;
-                        this.image = game.assets['img/valinnat.png'];
-                        this.scaleX = 0.07;
-                        this.scaleY = 0.4;
+                        this.image = game.assets['img/pienet/valinnat.png'];
+                        this.scaleX = 0.1;
+                        this.scaleY = 0.8; // >NOTE<
                         this.label = new TitleLabel(text);
                         
                         this.label.x = this.x + this.width / 2 - 40;
